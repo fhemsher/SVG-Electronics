@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Iframe Title</title>
+<meta charset=utf-8 />
+<style type="text/css">
+<!--
+body {
+-moz-box-shadow: 4px 4px 5px #888;
+-webkit-box-shadow: 4px 4px 5px #888;
+box-shadow: 4px 4px 5px #888;
+}
+-->
+</style>
+</head>
+<body onload=sendSize() style='padding:5px;border-radius:10px;border:2px solid lightblue;background-color:transparent;margin:0;font-family:arial'>
+<div id=containerDiv style=background:linen>
+
+<table style='width:360px;'>
+<tr>
+<td>
+<table style='width:100%;background-color:gainsboro'>
+<tr ><td id=drawArcTopTable style='width:90%;background-color:linen' align=center><span id=drawArcEditSpan>Draw Arcs</span></td><td align=right> <button onClick=parent.closeDrawArc()  >X</button></td></tr>
+</table>
+</td>
+
+</tr>
+
+<tr ><td  align=center>
+<table>
+<tr><td align=center >Enclose:<input id=encloseCheck onclick=parent.encloseChecked() type="checkbox" /></td><td>  *Center Lines:<input id=centerLineCheck onclick=parent.centerLineChecked() type="checkbox" /></td></tr>
+<tr><td colspan=2 align=center>*Draw lines from each end point to the arc's bounding box center</td></tr>
+<tr><td colspan=2 align=center>Radius x:<input  onmousedown="parent.XRadius=true" onmouseup="parent.XRadius=false" onmousemove="parent.radiusXset(this.value)"  id=xRadiusSliderValue value=55 type=range min="0" max="500" step=1  value="1" class="slider" style=width:200px; /><input value=55 id=xRadiusValue type="text" style=width:30px /></td></tr>
+<tr><td colspan=2 align=center>Radius y:<input  onmousedown="parent.YRadius=true" onmouseup="parent.YRadius=false" onmousemove="parent.radiusYset(this.value)"  id=yRadiusSliderValue value=250 type="range" min="0" step=1 max="500" value="1" class="slider" style=width:200px;  /><input value=250 id=yRadiusValue type="text" style=width:30px /></td></tr>
+<tr><td colspan=2 align=center >Note Circular arc: Radius y = Radius x</td></tr>
+<tr><td colspan=2 align=center >Angle:<input  onmousedown="parent.Angle=true" onmouseup="parent.Angle=false" onmousemove="parent.setAngle(this.value)" id=angleSliderValue value=0 type="range" min="0" step=1 max="360" value="1" class="slider" style=width:200px;  /><input value=0 id=angleValue type="text" style=width:30px /></td></tr>
+<tr><td colspan=2 align=center  >Large Arc Flag:<input id=largeArcFlagCheck onclick=parent.largeArcFlagChecked() type="checkbox" />  Sweep Flag:<input id=sweepFlagCheck onclick=parent.sweepFlagChecked() type="checkbox" /></td></tr>
+<tr>
+	<td colspan=2 valign=bottom align=center>Rotate Arc
+		&nbsp;&nbsp;<button  onClick=parent.rotateArcAdjust(-1) style='height:25px;width:25px;padding:0px'><img width=20 height=20 src="../Images/minusRound.png" /></button>
+		<select title="rotate toggle value" id=rotateDrawArcAdjustSelect >
+		<option>.5</option>
+		<option>1</option>
+		<option>2</option>
+		<option selected>5</option>
+		<option>10</option>
+		</select>
+		<button onClick=parent.rotateArcAdjust(1)   style='height:25px;width:25px;padding:0px'><img width=20 height=20 src="../Images/plusRound.png" /></button>
+	</td>
+</tr>
+<tr>
+	<td colspan=2  valign=bottom align=center>Scale Arc
+		&nbsp;&nbsp;<button  onClick=parent.scaleArcAdjust(-1) style='height:25px;width:25px;padding:0px'><img width=20 height=20 src="../Images/minusRound.png" /></button>
+		<select title="scale toggle value" id=scaleDrawArcAdjustSelect >
+		<option>.1</option>
+		<option>.2</option>
+		<option>.25</option>
+
+		</select>
+		<button onClick=parent.scaleArcAdjust(1)   style='height:25px;width:25px;padding:0px'><img width=20 height=20 src="../Images/plusRound.png" /></button>
+
+	</td>
+</tr>
+</table>
+
+
+
+</td></tr>
+
+<tr>
+<td align=center >Stroke <span id=drawArcStrokeBg >Color:</span>
+<select  title="Stroke Color" onChange=parent.showDrawArcStrokeBg() id=drawArcStrokeSelect></select>
+width:
+  <select onChange=parent.drawArcStrokeWidthSelected() id=drawArcStrokeWidthSelect>
+		<option >0.5</option>
+		<option >1</option>
+		<option selected>2</option>
+		<option >3</option>
+		<option >4</option>
+		<option >5</option>
+		<option >6</option>
+		<option >7</option>
+		<option >8</option>
+		<option >9</option>
+		<option >10</option>
+		<option >15</option>
+		<option >20</option>
+		<option >25</option>
+		<option >30</option>
+		</select><br/>
+Dash:<input type=checkbox id=drawArcStrokeDashCheck onClick=parent.drawArcStrokeDashChecked() />
+  &nbsp;Shadow:<input id=drawArcShadowCheck onClick=parent.drawArcShadowChecked() type="checkbox" />
+</td>
+</tr>
+
+<tr>
+<td align=center >Fill <span id=drawArcFillBg >Color:</span>
+<select  title="Fill Opacity" onChange=parent.showDrawArcFillBg() id=drawArcFillSelect></select>
+Opacity:
+  <select onChange=parent.drawArcOpacitySelected() id=drawArcOpacitySelect>
+		<option >0.1</option>
+		<option>0.2</option>
+		<option >0.3</option>
+		<option >0.4</option>
+		<option>0.5</option>
+		<option >0.6</option>
+		<option >0.7</option>
+		<option >0.8</option>
+		<option >0.9</option>
+		<option  selected >1.0</option>
+
+		</select>
+
+</td>
+</tr>
+
+
+
+
+<tr align=center>
+<td>
+	<button id=drawArcCancelButton disabled title='cancel/remove this circle' onClick=parent.cancelDrawArc()>cancel</button>
+	<button id=drawArcTopButton style=background:white;font-size:120%;font-weight:bold;color:maroon;visibility:hidden  title='Move to top' onClick=parent.topDrawArc()>&#x21E7;</button>
+	<button id=drawArcBotButton style=background:white;font-size:120%;font-weight:bold;color:maroon;   title='Move to bottom' onClick=parent.botDrawArc()>&#x21E9;</button>
+
+  <button style='background-color:red;visibility:hidden' id=drawArcDeleteButton  onClick=parent.removeCurrentDrawArc()>delete</button>
+
+    <button id=drawArcFinishButton disabled onClick=parent.finishDrawArc()>finish</button>
+</td>
+</tr>
+
+</table>
+</div>
+
+
+</body>
+<script>
+
+function writeArcColorSelection()
+{
+   var DrawColors=parent.clrArray
+	for(var k=0;k<DrawColors.length;k++)
+	{
+		var name=DrawColors[k][0]
+		var myColor=DrawColors[k][1]
+		var option=document.createElement("OPTION")
+		option.style.backgroundColor=myColor
+		option.value=myColor
+		option.title=name+" "+myColor
+
+		option.text=k
+
+
+		var option=document.createElement("OPTION")
+		option.style.backgroundColor=myColor
+		option.value=myColor
+		option.title=name+" "+myColor
+
+		option.text=k
+        drawArcStrokeSelect.appendChild(option)
+
+       	var option=document.createElement("OPTION")
+		option.style.backgroundColor=myColor
+		option.value=myColor
+		option.title=name+" "+myColor
+		option.text=k
+
+
+		var option=document.createElement("OPTION")
+		option.style.backgroundColor=myColor
+		option.value=myColor
+		option.title=name+" "+myColor
+
+		option.text=k
+        drawArcFillSelect.appendChild(option)
+
+
+
+
+	}
+	drawArcStrokeSelect.selectedIndex=44
+	var clr=drawArcStrokeSelect.options[drawArcStrokeSelect.selectedIndex].value
+	drawArcStrokeBg.style.backgroundColor=clr
+}
+
+
+function sendSize()
+{
+
+  writeArcColorSelection()
+   var width=containerDiv.scrollWidth+15
+   var height=containerDiv.scrollHeight+30
+
+   parent.sizeFrame('addElemArc',width,height)
+
+
+     if(parent.EditArc==true)
+        parent.setEditArc()
+        else
+       parent.startArcDraw()     
+
+}
+
+
+</script>
+</html>

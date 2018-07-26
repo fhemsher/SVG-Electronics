@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Iframe Title</title>
+<meta charset=utf-8 />
+<style type="text/css">
+<!--
+body {
+-moz-box-shadow: 4px 4px 5px #888;
+-webkit-box-shadow: 4px 4px 5px #888;
+box-shadow: 4px 4px 5px #888;
+}
+-->
+</style>
+</head>
+<body onload=sendSize() style='padding:5px;border-radius:10px;border:2px solid lightblue;background-color:transparent;margin:0;font-family:arial'>
+<div id=containerDiv style=background:#0000cd;color:white>
+
+<table style='width:330px;'>
+<tr>
+<td>
+<table style='width:100%;background-color:#0000cd'>
+<tr ><td id=drawGraphTopTable style='width:90%;background-color:#0000cd' align=center><span id=drawGraphEditSpan>Draw Graphs</span></td><td align=right> <button onClick=parent.closeDrawGraph()  >X</button></td></tr>
+</table>
+</td>
+
+</tr>
+<tr>
+<td align=center >
+    Curve:<input checked type="radio" id=drawGraphCurveRadio name=drawGraphRAdio onClick=drawGraphOpacitySelect.disabled=false;drawGraphOpacitySelect.selectedIndex=9 />
+    Scatter Plot:<input type="radio" id=drawGraphScatterPlotRadio name=drawGraphRAdio onClick=drawGraphOpacitySelect.disabled=true;drawGraphOpacitySelect.selectedIndex=9/>
+</td>
+</tr>
+
+
+<tr>
+<td align=center >
+    Scale: <input  onmousedown="parent.ScaleGraph=true" onmouseup="parent.ScaleGraph=false" onmousemove="parent.scaleGraph(this.value)" id=scaleRangeValue style=width:220px type="range" value=1  min=".1" step=.05 max="1"> <input style=width:40px id=scaleValue type="text" value=1.0 />
+</td>
+</tr>
+<tr>
+<td align=left >
+    Title:<input id=drawGraphTitleValue type="text" style=width:160px value="My Graph Title" /><br>
+    X-axis Name:<input  id=drawGraphXaxisValue type="text" style=width:80px  value="X Axis Name"  /><br>
+    Y-axis Name:<input  id=drawGraphYaxisValue type="text" style=width:80px value="Y Axis Name"  />
+
+</td>
+</tr>
+
+<tr>
+<td align=center >Graph Stroke <span  id=drawGraphStrokeBg >Color:</span>
+<select  title="Stroke Color" onChange=parent.showDrawGraphStrokeBg() id=drawGraphStrokeSelect></select>
+width:
+  <select onChange=parent.drawGraphStrokeWidthSelected() id=drawGraphStrokeWidthSelect>
+		<option >0.5</option>
+		<option >1</option>
+		<option selected>2</option>
+		<option >3</option>
+		<option >4</option>
+		<option >5</option>
+		<option >6</option>
+		<option >7</option>
+		<option >8</option>
+		<option >9</option>
+		<option >10</option>
+		<option >15</option>
+		<option >20</option>
+		<option >25</option>
+		<option >30</option>
+		</select><br/>
+</td>
+</tr>
+<tr>
+<td align=center >Graph Fill <span id=drawGraphFillBg >Color:</span>
+<select  title="Graph Fill Color" onChange=parent.showDrawGraphFillBg() id=drawGraphFillSelect></select>
+Opacity:
+  <select onChange=parent.drawGraphOpacitySelected() id=drawGraphOpacitySelect>
+		<option >0.1</option>
+		<option>0.2</option>
+		<option >0.3</option>
+		<option >0.4</option>
+		<option>0.5</option>
+		<option >0.6</option>
+		<option >0.7</option>
+		<option >0.8</option>
+		<option >0.9</option>
+		<option  selected >1.0</option>
+
+		</select>
+
+</td>
+</tr>
+
+
+<tr align=center>
+<td>
+X-Axis Date Format:<input id=drawGraphTimeFormatCheck onclick=parent.drawGraphTimeFormatChecked() type="checkbox" />
+<br><select disabled id=drawGraphDateFormatSelect onchange=parent.drawGraphDateFormatSelected()>
+<option >Select Date Format</option>
+<option value=iso1 >YYYY-MM-DD</option>
+<option value=iso2 >YYYY/MM/DD hh:mm:ss</option>
+<option value=iso3 >YYYY-MM-DDThh:mm</option>
+<option value=mdy >MM/DD/YYYY</option>
+<option value=mdyhm>MM/DD/YYYY hh:mm</option>
+<option value=mdyhms >MM/DD/YYYY hh:mm:ss</option>
+<option value=hms >hh:mm:ss</option>
+<option value=ms >mm:ss</option>
+</select>
+<div id=drawGraphDateFormatDiv></div>
+<br><br>
+ Add Data Values<br>
+<button title="Use csv data format" id=drawGraphCSVButton onclick=parent.drawGraphCSVButtonClicked()>CSV</button>
+<button title="Use JSON data format"  id=drawGraphJSONButton onclick=parent.drawGraphJSONButtonClicked()>JSON</button>
+
+
+Data Points:<input title="Number of data points" type="text" id=drawGraphDataPointsValue style=width:40px  /> <button id=drawGraphDataPointsButton onclick=parent.drawGraphDataPointsButtonClicked() title="Insert Point Values"   >Points</button>
+<div style='color:black;background:white;width:330px;height:200px;overflow-y:scroll'>
+   <table style=width:100%;border-collapse:collapse; border=1 id=drawGraphDataTable>
+   <tr align=center><td>#</td><td>X-axis Value</td><td>Y-axis Value</td></tr>
+   </table>
+   <textarea onClick=parent.resetError() placeholder="Paste CSV/JSON data here..." id=drawGraphDataValue style='width:300px;height:140px;border-width:0px;display:none;'></textarea>
+
+
+   <span id=validDataSpan>(After points are completed,
+   click on drawing to locate graph.)</span>
+   </div>
+</td>
+</tr>
+
+
+<tr align=center>
+<td>
+	<button id=drawGraphCancelButton disabled title='cancel/remove this graph' onClick=parent.cancelDrawGraph()>cancel</button>
+
+  <button style='background-color:red;visibility:hidden' id=drawGraphDeleteButton  onClick=parent.removeCurrentDrawGraph()>delete</button>
+
+    <button id=drawGraphFinishButton disabled onClick=parent.finishDrawGraph()>finish</button>
+</td>
+</tr>
+
+</table>
+</div>
+
+
+</body>
+<script>
+
+function writeGraphColorSelection()
+{
+   var DrawColors=parent.clrArray
+	for(var k=0;k<DrawColors.length;k++)
+	{
+		var name=DrawColors[k][0]
+		var myColor=DrawColors[k][1]
+
+
+
+		var option=document.createElement("OPTION")
+		option.style.backgroundColor=myColor
+		option.value=myColor
+		option.title=name+" "+myColor
+
+		option.text=k
+        drawGraphStrokeSelect.appendChild(option)
+
+       	var option=document.createElement("OPTION")
+		option.style.backgroundColor=myColor
+		option.value=myColor
+		option.title=name+" "+myColor
+		option.text=k
+
+
+		var option=document.createElement("OPTION")
+		option.style.backgroundColor=myColor
+		option.value=myColor
+		option.title=name+" "+myColor
+
+		option.text=k
+        drawGraphFillSelect.appendChild(option)
+
+
+
+
+	}
+	drawGraphStrokeSelect.selectedIndex=44
+	var clr=drawGraphStrokeSelect.options[drawGraphStrokeSelect.selectedIndex].value
+	drawGraphStrokeBg.style.backgroundColor=clr
+}
+
+
+function sendSize()
+{
+
+  writeGraphColorSelection()
+   var width=containerDiv.scrollWidth+15
+   var height=containerDiv.scrollHeight+30
+
+   parent.sizeFrame('addElemGraph',width,height)
+
+
+     if(parent.EditGraph==true)
+        parent.setEditGraph()
+        else
+       parent.startGraphDraw()     
+
+}
+
+
+</script>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Iframe Title</title>
+<meta charset=utf-8 />
+<style type="text/css">
+<!--
+body {
+-moz-box-shadow: 4px 4px 5px #888;
+-webkit-box-shadow: 4px 4px 5px #888;
+box-shadow: 4px 4px 5px #888;
+}
+-->
+</style>
+</head>
+<body onload=sendSize() style='padding:5px;border-radius:10px;border:2px solid lightblue;background-color:transparent;margin:0;font-family:arial'>
+<div id=containerDiv style=background:#3cb371;color:white>
+
+<table style='width:330px;'>
+<tr>
+<td>
+<table style='width:100%;background-color:#3cb371'>
+<tr ><td id=drawChartTopTable style='width:90%;background-color:#3cb371' align=center><span id=drawChartEditSpan>Draw Pie Charts</span></td><td align=right> <button onClick=parent.closeDrawChart()  >X</button></td></tr>
+</table>
+</td>
+
+</tr>
+
+
+
+<tr>
+<td align=center >
+    Scale: <input  onmousedown="parent.ScaleChart=true" onmouseup="parent.ScaleChart=false" onmousemove="parent.scaleChart(this.value)" id=scaleRangeValue style=width:220px type="range" value=1  min=".1" step=.05 max="1"> <input style=width:40px id=scaleValue type="text" value=1.0 />
+</td>
+</tr>
+<tr>
+<td align=left >
+   Chart Title:<input id=drawChartTitleValue type="text" style=width:160px value="My Chart Title" /><br>
+
+</td>
+</tr>
+
+<tr>
+<td align=center >
+    How Many Slices? <input type="text" style=width:30px id=drawChartSliceValue /><button id=drawChartSliceButton onClick=parent.drawChartSliceButtonClicked()>start</button>
+   <div style=width:200px;background:white;color:black;height:200px;overflow-y:scroll>
+<table id=drawChartSliceTable border=1 style=border-collapse:collapse >
+      <tr>
+       <td>#</td><td align=center>Slice Title</td><td align=center>Value</td>
+
+      </tr>
+
+
+   </table>
+  </div>
+
+   <br><span id=valuesCompletedSpan>(Click on drawing after values are completed)</span>
+</td>
+</tr>
+
+
+<tr align=center>
+<td>
+	<button id=drawChartCancelButton disabled title='cancel/remove this graph' onClick=parent.cancelDrawChart()>cancel</button>
+
+  <button style='background-color:red;visibility:hidden' id=drawChartDeleteButton  onClick=parent.removeCurrentDrawChart()>delete</button>
+
+    <button id=drawChartFinishButton disabled onClick=parent.finishDrawChart()>finish</button>
+</td>
+</tr>
+
+</table>
+</div>
+
+
+</body>
+<script>
+
+
+
+
+function sendSize()
+{
+
+
+   var width=containerDiv.scrollWidth+15
+   var height=containerDiv.scrollHeight+30
+
+   parent.sizeFrame('addElemChart',width,height)
+
+
+     if(parent.EditChart==true)
+        parent.setEditChart()
+        else
+       parent.startChartDraw()
+
+}
+
+
+</script>
+</html>

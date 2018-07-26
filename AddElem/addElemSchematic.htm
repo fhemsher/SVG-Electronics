@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+  <title>Untitled</title>
+<style type="text/css">
+<!--
+body {
+-moz-box-shadow: 4px 4px 5px #888;
+-webkit-box-shadow: 4px 4px 5px #888;
+box-shadow: 4px 4px 5px #888;
+}
+-->
+</style>
+</head>
+
+<body onload=sendSize() style=font-family:arial>
+<div id=containerDiv style="padding:10px;background:#E0CAEA;border-radius:10px;border:1px solid purple">
+<table style=width:100%; ><tr><td style=width:90% align=center><b>Create A Schematic</b></td><td align=right><button onClick=parent.closeDrawSchematic() >X</button></td></tr></table>
+<div style=text-align:justify;font-size:90%><i>
+A Schematic is a <b>group</b> of elements that can represent electronic circuit diagrams.
+</i>
+</div><br>
+<div style=text-align:justify;font-size:80%'>
+Click to set upper-left of schematic elements' containment rectangle. Then drag cursor to bottom-right and click to capture desired elements for the schematic group.
+
+</div>
+<center>
+
+<button disabled id=cancelButton  onClick=parent.cancelSchematic();parent.startSchematicDraw()  >cancel</button>
+<button disabled id=finishButton  onClick=parent.finishSchematic()>finish</button>
+
+</center>
+
+
+<div id=saveToLibraryDiv style=opacity:.5>
+<div style=text-align:justify;font-size:90%><i><center><b>Save to Library ?</b></center>You may share your schematic with others... Send it to the library. Include a Category and associated Title, then select <button>save</button>. NOTE: At any time you can remove it from the library.</i>
+</div>
+<table class="copySource" >
+<tr><td><p></p>
+Title:<input id=mySchematicTitleValue type="text" style=width:200px/><br>
+
+Category:<select name="" id="schematicCategorySelect">
+<option>Schematic Category:</option>
+<option>Combinational Logic</option>
+<option>DC Circuits</option>
+<option>Filters</option>
+<option>Logic Gate Circuits</option>
+<option>LC Oscillators </option>
+<option>RC Networks</option>
+<option>Waveform Generators</option>
+<option> Amplifiers</option>
+<option> Connectivity </option>
+<option>Diode Circuits</option>
+<option>Inductor Circuits</option>
+<option>Power Circuits</option>
+<option>Attenuators</option>
+<option>Operational Amplifiers</option>
+<option>Sequential Logic</option>
+<option>Operational Amplifiers</option>
+<option> Miscellaneous Circuits</option>
+
+</select>
+
+ </td></tr>
+<tr>
+<td><input type="text" id=mySchematicTitleValue style="width:270px" placeholder="Your Schematic Title" /></td></tr>
+<tr> <td><input type="text" id=mySchematicNameValue style="width:270px" placeholder="Your Name" /></td></tr>
+<tr> <td><input type="text" id=mySchematicEmailValue style="width:270px" placeholder="Your Email" /></td></tr>
+<tr> <td align=center><button disabled  onClick=parent.sendSchematic() id=sendButton >save</button></td></tr>
+<tr> <td align=center><button disabled  onClick=parent.refreshSchematicLibrary() id=refreshSchematicLibraryButton >refresh library</button></td></tr>
+
+<tr><td style=height:30px; ><span class="copySource"  id=sendSchematicMessageSpan style=color:blue></span></td></tr>
+
+</table>
+</div>
+
+</div>
+
+<script>
+function sendSize()
+{
+
+
+   var width=containerDiv.scrollWidth+30
+   var height=containerDiv.scrollHeight+30
+
+   parent.sizeFrame('addElemSchematic',width,height)
+   if(parent.getCookie("name")&&parent.getCookie("email"))
+   {
+       mySchematicNameValue.value=parent.getCookie("name").replace(/%20/g," ")
+       mySchematicEmailValue.value=parent.getCookie("email").replace(/%20/g," ")
+
+
+   }
+
+
+       parent.startSchematicDraw()
+
+}
+</script>
+</body>
+
+</html>
