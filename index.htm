@@ -1,0 +1,557 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head> <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+  <title>Draw SVG Electronic Diagrams</title>
+  <script type="text/javascript" src="highlight.pack.js"></script>
+  <link href='highlight.css' rel='stylesheet' />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+<script charset="UTF-8" type="text/javascript" src="js00_utility/iframeSelection.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js00_utility/zoom.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js00_utility/hmiSymbolSelection.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js00_utility/color.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js00_utility/pathSeg.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js00_utility/select.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js00_utility/helperFuncts.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js00_utility/cookie.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js00_utility/print.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js00_utility/showHideHelp.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js01_start/jquery2.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js01_start/initD3Svg.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js01_start/grid.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js01_start/svg.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js02_location/cursorLoc.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js02_location/transformAdd.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjZoom.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js04_svgSource/handleSource.js"></script>
+<script charset="UTF-8" type="text/javascript" src="js04_svgSource/showSource.js"></script>
+ <script  charset="UTF-8" type="text/javascript" src="d3.v4.min.js"></script>
+
+
+ <style type="text/css">
+  .noselect {
+      /*---prevent text element focus under create/edit elements---*/
+-webkit-touch-callout: none; /* iOS Safari */
+-webkit-user-select: none; /* Safari */
+-khtml-user-select: none; /* Konqueror HTML */
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* Internet Explorer/Edge */
+user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+unselectable="on"
+onselectstart="return false;"
+onmousedown="return false;"
+ }
+ </style>
+
+</head>
+
+<body style='font-family:arial;background:#f0f8ff' >
+
+<DIV id=containerDiv  style=position:absolute;top:60px;left:0px >
+<TABLE>
+ <TR>
+ <TD valign=top>
+ <DIV ID="iframeDiv" style='position:relative;top:0px;left:0px;width:400px'>
+<div id=addElemIconFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemIconFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Icon/drawIcon.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjIcon.js"></script>
+<div id=addElemCircleFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemCircleFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Circle/drawCircle.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjCircle.js"></script>
+<div id=addElemGraphFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemGraphFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Graph/drawGraph.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Graph/drawGraphObject.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjGraph.js"></script>
+<div id=addElemChartFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemChartFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Chart/drawChart.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Chart/drawChartObject.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjChart.js"></script>
+<div id=addElemArcFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemArcFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Arc/drawArc.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjArc.js"></script>
+<div id=addElemEllipseFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemEllipseFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Ellipse/drawEllipse.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjEllipse.js"></script>
+<div id=addElemRectFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemRectFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Rect/drawRect.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjRect.js"></script>
+<div id=addElemBGimageFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemBGimageFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/BGimage/drawBGimage.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjBGimage.js"></script>
+<div id=addElemImageFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemImageFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Image/drawImage.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjImage.js"></script>
+
+
+
+<div id=addElemTextFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemTextFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Text/drawText.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjText.js"></script>
+<div id=addElemPathFrameDiv  style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemPathFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Path/drawPath.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Path/drawPathButton.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="js03_drag/dragPathPoint.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="js03_drag/dragAddPath.js"></script>
+
+<div id=addElemPathEditFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemPathEditFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Path/drawPathEdit.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Path/drawPathEditButton.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="js03_drag/dragPathPointEdit.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="js03_drag/dragPathEdit.js"></script>
+<div id=addElemPgonFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemPgonFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Pgon/drawPgon.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjPgon.js"></script>
+
+<div id=addElemTextureFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemTextureFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Texture/drawTexture.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Texture/textures.js"></script>
+<div id=addElemGradientFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemGradientFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Gradient/drawGradient.js"></script>
+<div id=addElemPolygonFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemPolygonFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Polygon/drawPolygon.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjPolygon.js"></script>
+<div id=addElemComponentFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemComponentFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Component/drawComponent.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjComponent.js"></script>
+<div id=editElemComponentFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=editElemComponentFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Component/editComponent.js"></script>
+    <script  charset="UTF-8" type="text/javascript" src="AddElem/Component/aspComponentRequest.js"></script>
+    <script  charset="UTF-8" type="text/javascript" src="AddElem/Component/updateComponent.js"></script>
+    <script  charset="UTF-8" type="text/javascript" src="AddElem/Component/writeComponentSymbols.js"></script>
+    <script  charset="UTF-8" type="text/javascript" src="AddElem/Component/writeComponentTextures.js"></script>
+    <script  charset="UTF-8" type="text/javascript" src="AddElem/Component/writeComponentGradients.js"></script>
+
+<div id=addElemSchematicFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=addElemSchematicFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Schematic/drawSchematic.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="js03_drag/dragObjSchematic.js"></script>
+<div id=editElemSchematicFrameDiv style='padding:10px;border-radius:10px;position:fixed;visibility:hidden;width:1px;height:1px;overflow:hidden'><iframe id=editElemSchematicFrame style='border-width:0px;height:1px;overflow:hidden;'   scrolling='no' frameborder='0'   ></iframe></div>
+	<script charset="UTF-8" type="text/javascript" src="AddElem/Schematic/editSchematic.js"></script>
+    <script  charset="UTF-8" type="text/javascript" src="AddElem/Schematic/aspSchematicRequest.js"></script>
+    <script  charset="UTF-8" type="text/javascript" src="AddElem/Schematic/updateSchematic.js"></script>
+    <script  charset="UTF-8" type="text/javascript" src="AddElem/Schematic/writeSchematicSymbols.js"></script>
+    <script  charset="UTF-8" type="text/javascript" src="AddElem/Schematic/writeSchematicTextures.js"></script>
+    <script  charset="UTF-8" type="text/javascript" src="AddElem/Schematic/writeSchematicGradients.js"></script>
+
+
+ </DIV>
+
+ </TD>
+ <TD>
+<div id=svgDiv style="border:1px solid black;width:800px;height:560px">
+<svg id=mySVG width=800 height=560 viewBox="0 0 800 560" style="cursor:default">
+    <style type="text/css" >
+<![CDATA[
+.grid line {
+stroke: lightgrey;
+stroke-opacity: 0.7;
+shape-rendering: crispEdges;
+}
+.grid path {
+stroke-width: 0;
+}
+
+]]>
+</style>
+</svg>
+</div>
+<center>
+
+<p></p>
+
+
+
+ Drawing Width:<input type="text" value=800 id=svgWidthValue style='width:40px' />
+ Drawing Height:<input type="text" value=560 id=svgHeightValue style='width:40px' />&nbsp;<button id=setSVGSizeButton onClick=setSVGSizeButtonClicked() title="Set SVG drawing size">set</button>
+
+<TABLE style=width:800px;><TR>
+ <TD>
+  <button title="Show current drawing's SVG source" onClick=svgCopy()>SVG Source</button>
+  <button title="Copy SVG for other applications" onClick=publishSVG()>Publish</button>
+  <button id=clearButton title="Clear current SVG drawing"  onClick=clearButtonClicked() >Clear/Start Over</button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </TD>
+<TD>
+<table>
+    <tr>
+        <td><nobr>Save SVG As:</nobr></td>
+        <td><input id="inputFileNameToSaveAs" placeholder="Include your fileName.svg"></input></td>
+        <td><button Title="Save current drawing to your computer" onclick="saveSvgAsFile()">save</button></td>
+    </tr>
+ </table>
+</TD>
+ <TD>
+ <button title="Import/Edit an existing SVG schematic drawing" onClick=openExistingSVG()>Existing SVG</button></TD>
+</TR>
+<TR>
+<TD COLSPAN=3 ALIGN=CENTER>
+<div class="copy"  id=existingSVGDiv style="display:none">
+<textarea id=existingSVGValue placeholder="Paste existing  svg schematic source here..." style=width:90%;height:100px></textarea>
+<br> &nbsp; <button id=closeExistingDivButton style='visibility:hidden' title="Close" onclick=closeExistingDiv()>cancel</button>  <button style=color:blue; onClick=insertExistingSVG()><u>insert</u></button>
+</div>
+
+<div class="copy"  id=publishSVGDiv style="display:none">
+<center>Download this schematic to your computer for publication in other applications.</center>
+<textarea id=publishSVGValue style=width:90%;height:100px></textarea>
+ <table>
+    <tr>
+        <td><nobr>Publish SVG As:</nobr></td>
+        <td><input id="inputPublishFileNameToSaveAs" placeholder="Include your fileName.svg"></input></td>
+        <td><button Title="Save current drawing to your computer" onclick="publishSvgAsFile()">send</button></td>
+        <td><button id=closePublishDivButton style='visibility:hidden' title="Close" onclick=closePublishDiv()>Close</button></td>
+    </tr>
+ </table>
+</div>
+
+</TD>
+ </TR></TABLE>
+
+
+</TD>
+
+</TR>
+</TABLE>
+<center>
+<div id=svgSaveDiv class="copySource" style=display:none;height:1px;overflow:auto;width:1200px;text-align:left; /></div>
+  <div id=svgSourceDiv style=display:none;overflow:auto;width:1200px;text-align:left; /></div>
+
+
+
+<p></p>
+<div id=emDiv style='width:100%;text-align:right' ></div><p></p>
+
+</center>
+
+</DIV>
+<div id=introDiv style='position:absolute;top:60px;left:10px;width:360px;background:#ABCDEF;border:1px solid blue;border-radius:15px;padding:10px;color:MIDNIGHTBLUE'>
+<center>
+<b>Create/Save/Edit SVG Electronic Drawings</b><br>
+<img src="Images/intro.png" alt="Create/Save/Edit SVG Electronic Drawings" />
+</center>
+Use SVG shapes to draw electronic wiring diagrams.
+SVG shapes are: Circles, ellipses, rectangles, text, paths, arcs, polygons, symbols and icons.<p></p>
+Also includes an Electronic Component Library and an Electronic Schematic Library, each comprised of SVG shapes.
+<p></p>
+You can share your custom components and schematics with others by adding them to the libraries.
+
+</div>
+<div id=schematicHelpDiv style='visibility:hidden;position:absolute;top:60px;left:10px;width:360px;height:640px;background:#ABCDEF;border:1px solid blue;border-radius:15px;padding:10px;color:MIDNIGHTBLUE'>
+<table style=width:100%><td style=width:90%; align=center><h7><b>SVG Schematic Library</b></h7></td><td align=right><button onclick=closeSchematicHelp()>X</button></td></table>
+<br><div style=text-align:justify>
+Schematics are custom symbols for transmitters, sensors, actuators, dampers, controlled devices etc.
+<center><img src="Images/components.svg"  width=300 height=200 alt="SVG Process Control SCADA Schematics" /></center>
+You may copy one or more components  from the library into your schematic. The component can be modified within your schematic as needed.
+</div><br>
+<button style=background:#C3E6D3>Schematic Library</button> -
+Selecting this will show images of all  custom components currently in the library. Click on the image in the table to add the component to your schematic.
+Then <b>right-click</b> on the added component to drag, copy, and resize it, followed by selecting <button>finish</button>.
+<p></p>  <b>Creating A Schematic</b> - Also, you can
+create a component from a segment of your schematic drawing via <button style=background:#C3E6D3>Schematics</button>.
+<hr>
+
+
+<p></p>  <b>Adding Your Schematic to Library</b> - You can
+send a segment of your schematic drawing as a component to the library for use by others via <button style=background:#C3E6D3>Schematics</button>.
+<p></p>  <b>Remove Your Schematic from Library</b> - After you have sent a component to the library, you may remove it at any time.
+ All of your added components are listed in a table at the bottom of the Schematic Library symbols. Select <button style=background:red>remove</button> to delete the symbol from the library.
+<p></p>
+ Copy this library for your use: <a href="LIBRARY/Schematic.svg" target="_blank">Schematic.svg</a>
+
+</div>
+<div id=graphHelpDiv style='visibility:hidden;position:absolute;top:60px;left:10px;width:360px;color:white;background:#0000cd;border:1px solid blue;border-radius:15px;padding:10px;height:1px;overflow:hidden'>
+<table style=width:100%><td style=width:90%; align=center><h7><b>Draw Graphs</b></h7></td><td align=right><button onclick=closeGraphHelp()>X</button></td></table>
+ <center><img src="Images/graph.png" alt="" width="330" height="199" /></center>
+You can create a curve or scatter plot graph. Include the data via CSV format, a JSON object, or input individual data points.
+<p></p>
+The CSV (comma separated values) header values are:<br><center><i>xData,yData</i></center><br>
+Each JSON data point has the format:<br><center><i>{xData:"my x data value",yData:"my y data value"}</i></center>
+<p></p>
+Select colors and size of the graph.
+<p></p>
+if the x axis is a time line based on calendar dates, select the desired date's format.
+
+
+</div>
+
+<div id=chartHelpDiv style='visibility:hidden;position:absolute;top:60px;left:10px;width:360px;color:white;background:#3cb371;border:1px solid blue;border-radius:15px;padding:10px;height:1px;overflow:hidden'>
+<table style=width:100%><td style=width:90%; align=center><h7><b>Draw Pie Charts</b></h7></td><td align=right><button onclick=closeChartHelp()>X</button></td></table>
+ <center><img src="Images/pieChart.png" alt="" width="297" height="309" /></center>
+You can create a pie chart. Provide the chart's title.
+Then for each slice, include the slice's title and its associated numerical value.
+You may adjust the size of the chart via the Scale slider.
+</div>
+
+
+
+<div id=helpDiv style='visibility:hidden;position:absolute;top:60px;left:10px;width:360px;height:1px;background:linen;border:1px solid blue;border-radius:15px;padding:10px;overflow:hidden'>
+<table style=width:100%><td style=width:90%; align=center><h7><b>Creating SVG Shape Elements</b></h7></td><td align=right><button onclick=closeHelp()>X</button></td></table>
+<br><div style=text-align:justify> Each element includes its unique pane to set &amp; edit its specific values. Click on the element's button to use its pane to create and place the element in the drawing.
+<u><i> After an element is created, it can be edited by moving the cursor over the element, then <b>right-click</b> the mouse  button.</u></i>
+</div>
+<p></p>
+<b>Paths</b> - Both linear and curved paths can be created by clicking their points on the drawing. Drag any point to modify its shape.
+<br>Paths can also create 3d-like strokes:
+<center><img src="Images/pipe3d.png" alt="Control Diagram 3D Piping" /></center>
+
+
+<p></p><b>Symbols</b> - This a list of thirty(30) polygons that can be created and placed in the drawing.
+
+
+<p></p><b>Icons</b> - Over 500 icons created from groups of unicode text elements: DINGBATS, GEOMETRIC, ARROWS, MATHEMATICAL, TECHNICAL, and SYMBOLS.
+<center><img src="Images/icons.png" alt="SVG Control SCADA Icons" /></center>
+
+<p></p><b>Textures</b> - Three(3) types of pre-built patterns are available: circles, lines, and paths. The pattern is placed in either an element's fill or stroke.
+<p></p><b>Gradients</b> - Radial and linear gradients can be created to be placed in either an element's fill or stroke.
+
+<p></p> <b>Shadows</b> - Each element can be selected to include a drop-shadow.
+
+<p></p> <b>Save/Edit SVG Drawing</b> - You may save the drawing within an .svg drawing stored on your computer. It can then be edited in the future by placing the file in the textarea, under the 'Existing SVG' selection.
+</div>
+
+
+
+
+<center>
+
+
+<div id=selectDrawElemDiv style='width:100%;background:#f0f8ff;position:fixed;top:0px;left:0px;'><b><span style="font-weight:bold;color:red;font-family:times new roman">SVG</span> <span style=color:blue><i>Electronics</i></span></b><button onClick=openHelp() style=width:25px;height:25px;padding:0px;border:0px;background:transparent ><img src="Images/help.png" alt="SVG SCADA Control Diagrams"  width=25 height=25 /></button>
+&nbsp; &nbsp; &nbsp; &nbsp; <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=getComponentLibraryButton  style=background-color:#C3E6D3 onClick=getComponentLibrary()>Electronic Components</button><img id=openComponentButton onClick=openComponentHelp() align=center src="Images/help.png"  width=20 height=20  alt="SVG SCADA Control Components" />
+&nbsp; &nbsp; &nbsp; &nbsp; <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=getSchematicLibraryButton  style=background-color:#E0CAEA onClick=getSchematicLibrary()>Electronic Schematics</button><img id=openSchematicButton onClick=openSchematicHelp() align=center src="Images/help.png"  width=20 height=20  alt="SVG Electronic Schematics" />
+&nbsp; &nbsp; &nbsp; &nbsp; <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddGraphButton  style=background-color:#0000cd;color:white onClick=openAddGraphDraw()>Graphs</button><img id=openGraphHelpButton onClick=openGraphHelp() align=center src="Images/help.png"  width=20 height=20  alt="Graphs" />
+&nbsp; &nbsp; &nbsp; &nbsp; <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddChartButton  style=background-color:#3cb371;color:white onClick=openAddChartDraw()>Charts</button><img id=openChartHelpButton onClick=openChartHelp() align=center src="Images/help.png"  width=20 height=20  alt="Charts" />
+
+
+
+<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddCircleButton  style=background-color:linen onClick=openAddCircleDraw()>Circles</button>
+            <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddEllipseButton  style=background-color:linen onClick=openAddEllipseDraw()>Ellipses</button>
+            <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddRectButton  style=background-color:linen onClick=openAddRectDraw()>Rectangles</button>
+            <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddTextButton  style=background-color:linen onClick=openAddTextDraw()>Text</button>
+            <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddPathButton  style=background-color:linen onClick=openAddPathDraw()>Paths</button>
+            <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddArcButton  style=background-color:linen onClick=openAddArcDraw()>Arcs</button>
+            <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddPolygonButton  style=background-color:linen onClick=openAddPolygonDraw()>Polygons</button>
+            <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddPgonButton  style=background-color:linen onClick=openAddPgonDraw()>Symbols</button>
+            <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddIconButton  style=background-color:linen onClick=openAddIconDraw()>Icons</button>
+            <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddImageButton title="Add image from your computer" style=background-color:linen onClick=openAddImageDraw()>Images</button>
+             &nbsp;&nbsp;<button title="Add pattern/texture fill to elements" onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddTextureButton  style=background-color:linen onClick=openAddTexture()><i>Textures</i></button>
+            <button title="Add Gradients" onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddGradientButton  style=background-color:linen onClick=openAddGradient()><i>Gradients</i></button>
+             &nbsp;&nbsp;
+            <button title="Create a component" onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddComponentButton   style=background-color:#C3E6D3 onClick=openAddComponentDraw();startComponentDraw()   ><i>Components</i></button>
+             &nbsp;&nbsp;
+            <button title="Create a schematic" onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddSchematicButton   style=background-color:#E0CAEA onClick=openAddSchematicDraw();startSchematicDraw()   ><i>Schematics</i></button>
+             &nbsp;&nbsp;
+            <button title="Import image from your computer as background template" onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddBGimageButton   style=background-color:ghostwhite onClick=openAddBGimage()   >Template Image</button>
+  </div>
+</center>
+
+
+<div id=componentHelpLibraryDiv style='visibility:hidden;position:absolute;top:60px;left:10px;width:360px;height:1px;background:#C3E6D3;;border:1px solid blue;border-radius:15px;padding:10px;overflow:hidden'>
+<table style=width:100%><td style=width:90%; align=center><h7><b>Electronic Component Library</b></h7></td><td align=right><button onclick=closeComponentHelp()>X</button></td></table>
+<br><div style=text-align:justify>
+Components are SVG symbols for electronic devices.
+<center><img src="Images/components.svg"  width=300 height=200 alt="SVG Process Control SCADA Components" /></center>
+You may copy one or more components  from the library into your drawing. The component can be modified within your drawing as needed.
+</div><br>
+<button style=background:#C3E6D3>Component Library</button> -
+Selecting this will show images of all  components currently in the library. Click on the image in the table to add the component to your drawing.
+Then <b>right-click</b> on the added component to drag, copy, and resize it, followed by selecting <button>finish</button>.
+<p></p>  <b>Creating A Component</b> - Also, you can
+create a component from a segment of your schematic drawing via <button style=background:#C3E6D3>Components</button>.
+<hr>
+
+
+<p></p>  <b>Adding Your Component to Library</b> - You can
+send a segment of your drawing as a component to the library for use by others via <button style=background:#C3E6D3>Components</button>.
+<p></p>  <b>Remove Your Component from Library</b> - After you have sent a component to the library, you may remove it at any time.
+ All of your added components are listed in a table at the bottom of the Component Library symbols. Select <button style=background:red>remove</button> to delete the symbol from the library.
+<p></p>
+ Copy this library for your use: <a href="LIBRARY/Component.svg" target="_blank">Component.svg</a>
+
+</div>
+
+
+<div id=schematicHelpLibraryDiv style='visibility:hidden;position:absolute;top:60px;left:10px;width:360px;height:1px;background:#E0CAEA;;border:1px solid blue;border-radius:15px;padding:10px;overflow:hidden'>
+<table style=width:100%><td style=width:90%; align=center><h7><b>Electronic Schematic Library</b></h7></td><td align=right><button onclick=closeSchematicHelp()>X</button></td></table>
+<br><div style=text-align:justify>
+Schematics are custom SVG drawings for a segment of your electronics drawing.
+<center><img src="Images/schematics.svg"  width=300 height=200 alt="SVG Process Control SCADA Schematics" /></center>
+You may copy one or more schematics  from the library into your drawing. The schematic can be modified within your drawing as needed.
+</div><br>
+<button style=background:#E0CAEA>Electronic Schematics</button> -
+Selecting this will show images of all  custom schematics currently in the library. Click on the image in the table to add the schematic to your schematic.
+Then <b>right-click</b> on the added schematic to drag, copy, and resize it, followed by selecting <button>finish</button>.
+<p></p>  <b>Creating A Schematic</b> - Also, you can
+create a schematic from a segment of your electronic drawing via <button style=background:#E0CAEA>Schematics</button>.
+<hr>
+
+
+<p></p>  <b>Adding Your Schematic to Library</b> - You can
+send a segment of your SVG drawing as a schematic to the library for use by others via <button style=background:#E0CAEA>Schematics</button>.
+<p></p>  <b>Remove Your Schematic from Library</b> - After you have sent a schematic to the library, you may remove it at any time.
+ All of your added schematics are listed in a table at the bottom of the Schematic Library symbols. Select <button style=background:red>remove</button> to delete the symbol from the library.
+<p></p>
+ Copy this library for your use: <a href="LIBRARY/Schematic.svg" target="_blank">Schematic.svg</a>
+
+</div>
+
+
+
+
+
+
+
+<div  id=elemSizeDiv
+  style='box-shadow: 4px 4px 4px #888888;-webkit-box-shadow:2px 3px 4px #888888;
+  font-size:80%;z-index:20;padding:4px;position:absolute;top:0px;left:0px;visibility:hidden;
+  background-color:linen;border: solid 1px black;border-radius:5px;cursor:default;'>
+
+</div>
+<div id=savedTextureDiv style='padding:5px;border-radius:8px;border:2px lightblue solid;visibility:hidden;background:linen;position:fixed;top:5px;left:400px;width:800px;height:70px;overflow-y:hidden;'>
+<table id=savedTextureTable ><tr align=center></tr></table>
+</div>
+
+
+<div id=componentTableDiv style='padding:10px;border:1px solid blue;background:#bfff00;visibility:hidden;width:370px;height:540px;overflow-y:auto;position:absolute;top:5px;left:10px'>
+<table style=width:100%><tr><td style=width:90% align=center><b>Components Library</b></td><td align=right></td></tr></table>
+<table id=componentTable border=1 style=border-collapse:collapse;width:100% ></table>
+<br>
+Remove Your Component(s) from Library:
+<table class="copySource"  id=componentListTable border=1 style='display:none;border-collapse:collapse' cellpadding=5>
+</table>
+<button title="Close Component Library" id=componentTableCloseButton onmouseover=this.style.background="red"  onmouseout=this.style.background=""  style='visibility:hidden;position:fixed;top:70px;left:345px' onclick=closeComponentTable() >X</button>
+
+</div>
+<div id=schematicTableDiv style='padding:10px;border:1px solid blue;background:#bfff00;visibility:hidden;width:370px;height:540px;overflow-y:auto;position:absolute;top:5px;left:10px'>
+<table style=width:100%><tr><td style=width:90% align=center><b>Schematic Library</b></td><td align=right></td></tr></table>
+<table id=schematicTable border=1 style=border-collapse:collapse;width:100% ></table>
+<br>
+Remove Your Schematic(s) from Library:
+<table class="copySource"  id=schematicListTable border=1 style='display:none;border-collapse:collapse' cellpadding=5>
+</table>
+<button title="Close Schematic Library" id=schematicTableCloseButton onmouseover=this.style.background="red"  onmouseout=this.style.background=""  style='visibility:hidden;position:fixed;top:70px;left:345px' onclick=closeSchematicTable() >X</button>
+
+</div>
+
+
+
+
+
+
+
+<div style='position:fixed;top:5px;left:95%'><button onClick=zoomDrawing() title="Mousewheel Zoom Drawing" id=zoomButton style='background:transparent;border:0px;width:30px;height:30px;padding:0px'><img src="Images/zoomButton.png" width=25 height=25 alt="SVG HMI Zoom SCADA Graphs"   /></button> <button onClick=openZoomHelp() style=width:20px;height:20px;padding:0px;border:0px;background:transparent ><img src="Images/help.png"  width=20 height=20 alt="Zoom Scada Drawing"   /></button>   </div>
+
+<div id=zoomHelpDiv style='background:white;visibility:hidden;position:fixed;top:60px;left:70%;width:300px;height:1px;border:1px solid blue;border-radius:5px;padding:10px;overflow:hidden'>
+    <table style=width:100%><td style=width:90%; align=center><h7><b>Mousewheel Zoom</b></h7></td><td align=right><button onclick=closeZoomHelp()>X</button></td></table>
+    <div style=text-align:justify>
+    Select this to zoom into the drawing via the mousewheel.<p></p>When zoomed you may drag/drop any element: With the cursor
+    over the element <b>right-click</b> the mouse button, then drag the element.
+    <p></p>To close the Mousewheel zoom feature, click the red zoom button symbol.
+    </div>
+</div>
+
+
+
+</body>
+<script>
+document.addEventListener("onload",init(),false)
+function init()
+{
+	initD3Svg()
+	createGridLayer()
+//  loadOpenerSCADA()
+
+	startCursorLoc()
+	writeEM()
+	showSourceSVG()
+	showSaveSVG()
+	$(".copy").children().bind('contextmenu', function(e){
+		e.stopPropagation();
+	});
+	$(".copySource").bind('contextmenu', function(e){
+		e.stopPropagation();
+	});
+	$("#componentDiv").children().bind('contextmenu', function(e){
+		e.stopPropagation();
+	});
+	var cookieNameSet=getCookie("name")
+	var cookieEmailSet=getCookie("email")
+	if(cookieNameSet&&cookieEmailSet)
+		setCookieValues(cookieNameSet,cookieEmailSet)
+
+    d3.select("#textSVG").transition().duration(5000).attr("opacity",0)
+    setTimeout('mySVG.removeChild(textSVG)',5000)
+
+}
+function setSVGSizeButtonClicked()
+{
+	var svgWidth=svgWidthValue.value
+	var svgHeight=svgHeightValue.value
+	svgDiv.style.width=svgWidth+"px"
+	svgDiv.style.height=svgHeight+"px"
+	mySVG.setAttribute("width",svgWidth)
+	mySVG.setAttribute("height",svgHeight)
+	mySVG.setAttribute("viewBox", "0 0 "+svgWidth+" "+svgHeight)
+	createGridLayer()
+    showSourceSVG()
+    showSaveSVG()
+}
+
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+function base64Plus()
+{
+var xhr = new XMLHttpRequest();
+    xhr.open("GET", "Images/plusRound.png", true);
+    xhr.responseType = "blob";
+    xhr.onload = function (e) {
+
+            var reader = new FileReader();
+            reader.onload = function(event) {
+               var res = event.target.result;
+
+            }
+            var file = this.response;
+            reader.readAsDataURL(file)
+
+    };
+    xhr.send()
+
+}
+function base64Minus()
+{
+var xhr = new XMLHttpRequest();
+    xhr.open("GET", "Images/minusRound.png", true);
+    xhr.responseType = "blob";
+    xhr.onload = function (e) {
+
+            var reader = new FileReader();
+            reader.onload = function(event) {
+               var res = event.target.result;
+              console.log(res)
+            }
+            var file = this.response;
+            reader.readAsDataURL(file)
+
+    };
+    xhr.send()
+
+}
+function writeEM()
+{
+   var em="Contact: "
+    em+="fhem"
+    em+="sher"
+    em+="@"
+    em+="gm"
+    em+="ail."
+    em+="com"
+   emDiv.innerHTML=em +" &nbsp;&nbsp;<span style=color:maroon>Last Update: 7/21/2018</span>"
+
+}
+
+
+</script>
+
+
+</html>
