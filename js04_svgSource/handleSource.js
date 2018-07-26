@@ -44,7 +44,7 @@ function destroyClickedElement(event)
 function clearButtonClicked()
 {
    closeAllFrames()
-   removeSCADA()
+   
    mySVG.removeAttribute("onclick")
    mySVG.removeAttribute("onmousedown")
    mySVG.removeAttribute("onmousemove")
