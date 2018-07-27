@@ -44,7 +44,7 @@ function destroyClickedElement(event)
 function clearButtonClicked()
 {
    closeAllFrames()
-   
+
    mySVG.removeAttribute("onclick")
    mySVG.removeAttribute("onmousedown")
    mySVG.removeAttribute("onmousemove")
@@ -99,10 +99,7 @@ function clearButtonClicked()
     if(bgImageG.childNodes.length>0)bgImageG.removeChild(bgImageG.lastChild)
 	inputFileNameToSaveAs.value=""
 	inputFileNameToSaveAs.placeholder="Include your fileName.svg"
-	processTableDiv.style.visibility='hidden'
-	LoadedProcessArray=[]
-	ProcessDoc=null
-	//showSourceSVG()
+   
 	showSaveSVG()
 	enableAllButtons()
 }
