@@ -1,9 +1,11 @@
 # SVG-Electronics
 Windows 10 Stand-Alone Application: Create SVG Electronics Drawings
 
-Dowload .zip folder and place on your computer in inetpub/wwwroot/ 
+**Dowload ZIP** folder, then create a new site under inetpub/wwwroot on your computer.
 
-To run the application, in localhost select the index.htm file. 
+Place unzipped files into that site's folder.
+
+To run the application, in **localhost** select the index.htm file. 
 
 You may then create/save/edit SVG electronics drawings.
 
