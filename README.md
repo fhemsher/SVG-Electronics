@@ -9,6 +9,8 @@ To run the application, in **localhost** select the index.htm file.
 
 You may then create/save/edit SVG electronics drawings.
 
+![](http://svg-electronics.com/Images/intro.png)
+
 To preview how this application works go to: http://svg-electronics.com
 
 NOTE:To store your svg images for the Component and Schematic libraries, the Windows IIS must have 
