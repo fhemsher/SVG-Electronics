@@ -2,12 +2,10 @@ function trackDrawImage()
 {
     var cw = addElemImageCw
 
-    if(ZoomDrawing==false&&ActiveElem==null&&EditImage==false && ImageDeleted==false)
+    if(ActiveElem==null&&ImageHREF&&EditImage==false && ImageDeleted==false)
     {
         DrawX.style("display", "inline")
-       DrawX.attr("transform", "translate("+SVGx+" "+SVGy+")")
-
-
+        DrawX.attr("transform", "translate("+SVGx+" "+SVGy+")")
 
     }
 }
@@ -25,7 +23,10 @@ function startImageDraw()
         DrawImage = true
         DrawX.style("display", "inline")
         mySVG.setAttribute('onclick', "placeDrawImage()") //---click to add more icons for this session---
-        cw.drawImageTopButton.style.visibility="hidden"
+        cw.drawImageTopButton.style.visibility = "hidden"
+        MyMap.scrollWheelZoom.disable();
+        MyMap.dragging.disable()
+    mySVG.setAttribute("cursor","default")
 
     }
 
@@ -33,56 +34,49 @@ function startImageDraw()
 
 function placeDrawImage()
 {
-                 var cw = addElemImageCw
-    if( cw.bgImgFile.value!="")
+    var cw = addElemImageCw
+    if(cw.bgImgFile.value!="")
     {
 
+        coverOn()
+
+        var opacity = cw.drawImageOpacitySelect.options[cw.drawImageOpacitySelect.selectedIndex].text
 
 
-    coverOn()
-
-    var opacity = cw.drawImageOpacitySelect.options[cw.drawImageOpacitySelect.selectedIndex].text
-
-        ActiveElem = d3.select("#domActiveElemG")
+        ActiveElem = ActiveElemG.append("image")
         .attr("id", "activeElem")
-    .attr("class", "dragTargetObj")
-   .attr("pointer-events", null)
-    .style("cursor", "move")
-    .attr("opacity", opacity)
-    .attr("transform", "translate("+SVGx+" "+SVGy+")")
+        .attr("fill-opacity", opacity)
+
+        activeElem=document.getElementById("activeElem")
+        activeElem.setAttribute("height", ImageHeight)
+        activeElem.setAttribute("width", ImageWidth)
+        activeElem.setAttribute("href", ImageHREF)
+        activeElem.setAttribute("InitZoom", MyMap.getZoom()       )
+
+        activeElem.setAttribute("transform", "translate("+SVGx+" "+SVGy+")")
+
+        ActiveElem.style("cursor", "move")
+        ActiveElem.attr("class", "dragTargetObj")
+        ActiveElem.attr("pointer-events", null)
+
+        domActiveElemG.appendChild(dragDot)
 
 
 
 
-    ActiveElem.append("image")
+         DragDot.attr("class", "dragTargetObj")
+        DragDot.attr("transform", "translate("+(SVGx+ImageWidth)+" "+(SVGy+ImageHeight)+")")
+        DragDot.style("visibility", "visible")
 
-
-
-
-
-
-    //---place dragDot in g---
-    activeElem = document.getElementById("activeElem")
-    activeElem.appendChild(dragDot)
-
-    activeElem.firstChild.setAttribute("height", 200)
-    activeElem.firstChild.setAttribute("width", 200)
-     activeElem.firstChild.setAttribute("href",ImageHREF)
-
-
-
-      DragDot.style("visibility", "visible")
-      //DragDot.attr("cx", 20)
 
         //activeElem.setAttribute("transform", "translate("+SVGx+" "+SVGy+")")
         DrawX.style("display", "inline")
         DrawX.attr("transform", "translate("+SVGx+" "+SVGy+")")
-        DragDot.attr("transform", "translate("+(200)+" "+(200)+")")
 
-         cw.bgImageWidthValue.value=200
-      cw.bgImageHeightValue.value=200
+
+        cw.bgImageWidthValue.value = ImageWidth
+        cw.bgImageHeightValue.value = ImageHeight
         ImageCorner =[SVGx, SVGy]
-
 
         mySVG.removeAttribute('onclick')
 
@@ -92,50 +86,61 @@ function placeDrawImage()
 
         cw.drawImageCancelButton.disabled = false
         cw.drawImageFinishButton.disabled = false
-        console.log(activeElem)
-      }
-}
 
+    }
+}
 
 var ImageHREF
- function loadImageFile() {
+var ImageWidth
+var ImageHeight
+function loadImageFile()
+{
 
-    var cw=addElemImageCw
+    var cw = addElemImageCw
 
-    var file    = cw.document.querySelector('input[type=file]').files[0];
-    var reader  = new FileReader();
+    var file = cw.document.querySelector('input[type=file]').files[0];
+    var reader = new FileReader();
     reader.addEventListener("load", function ()
+        {
+
+            ImageHREF = reader.result
+             var image = new Image();
+            image.src = reader.result;
+            image.onload = function() {
+
+                ImageWidth=image.naturalWidth
+                ImageHeight=image.naturalHeight
+
+            }
+        }
+        , false);
+
+    if (file)
     {
+        reader.readAsDataURL(file);
 
-        ImageHREF=reader.result
-
-
-  }, false);
-
-  if (file) {
-    reader.readAsDataURL(file);
-
-  }
+    }
 }
-
-
-
 
 ///---X button and iframe close all---
 function closeDrawImage()
 {
     if(addElemImageViz==true)
     {
-        RotateAngle = 0
         closeIframe("addElemImage");
+        coverOff()
+
+        RotateAngle = 0
         var cw = addElemImageCw
+        cw.adjustedRotateImageValue.value = 0
+        var elemTimelinded = false
 
         if(EditImage==true && ImageDeleted==false)
         {
             var elemObjEdit = document.getElementById(DrawImageEditId)
-            elemObjEdit.style.visibility = ""
-
+            elemObjEdit.style.display = "inline"
             elemObjEdit.setAttribute("onmousedown", "editImageDraw("+DrawImageEditId+",evt)")
+
         }
         DraggingObj = false
         DrawImage = false
@@ -145,97 +150,53 @@ function closeDrawImage()
         mySVG.removeAttribute("onmousedown")
         mySVG.removeAttribute("onmousemove")
         mySVG.removeAttribute("onmouseup")
+        MyMap.dragging.enable()
+        MyMap.scrollWheelZoom.enable();
         mySVG.removeAttribute('onclick')
-        if(activeElem)
+        if(document.getElementById("activeElem"))
         {
-           activeElem.removeChild(activeElem.firstChild)
-           dragDot.removeAttribute("transform")
+
             document.getElementById("activeElem").removeAttribute("class")
-            document.getElementById("activeElem").removeAttribute("transform")
-             activeElem.id="domActiveElemG"
+            domActiveElemG.removeChild(document.getElementById("activeElem"))
+            mySVG.appendChild(dragDot) //--place drag dot on top---
+            dragDot.removeAttribute("cx")
+            dragDot.removeAttribute("cy")
 
-            ActiveElem = null
         }
+        activeElem = null
+        ActiveElem = null
+        ImageHREF = null
+        DrawX.style("display", "none")
+        DrawX.attr("stroke", "violet")
+        DrawX.attr("transform", null)
+        DragDot.attr("cx", null)
+        DragDot.attr("transform", null)
+        DragDot.style("visibility", "hidden")
 
-        if(ActiveElem)
-            ActiveElem.style("cursor", null)
-
-            ActiveElem = null
-            DrawX.style("display", "none")
-            DrawX.attr("stroke", "violet")
-            DrawX.attr("transform", null)
-            DragDot.style("visibility", "hidden")
-            DragDot.attr("transform", null)
-
-            var cw = addElemImageCw
-
-
-            cw.drawImageFinishButton.disabled = true
-            cw.drawImageCancelButton.disabled = true
-            cw.drawImageDeleteButton.style.visibility = "hidden"
-            cw.drawImageEditSpan.innerText = "Add Images"
-            cw.drawImageTopTable.style.backgroundColor = "linen"
-            cw.containerDiv.style.backgroundColor = "linen"
-
-            coverOff()
-            //domWrapper.style.display = "none"
-
-            cw.adjustedRotateImageValue.value = 0
-          if(!document.getElementById("domActiveElemG"))
-          {
-              if(document.getElementById("activeElem"))
-              {
-                  activeElem=document.getElementById("activeElem")
-                   activeElem.removeChild(activeElem.firstChild)
-                   activeElem.id="domActiveElemG"
-                   activeElem.removeAttribute("transform")
-                   activeElem.removeAttribute("class")
-                   activeElem.removeAttribute("style")
-             if(!document.getElementById("dragDot") )
-             {
-                   DragDot = ActiveElemG.append("circle")
-                .attr("id", "dragDot")
-                .attr("class", "dragTargetObj")
-                .attr("cx", "0")
-                .attr("cy", "0")
-                .attr("r", "12")
-                .attr("fill", "white")
-                .attr("fill-opacity", ".5")
-                .attr("stroke", "black")
-                .attr("stroke-width", "1")
-                .attr("vector-effect", "non-scaling-stroke")
-                .style("visibility", "hidden")
-                .style("cursor", "default")
-                 activeElem.appendChild(dragDot)
-
-              }
-               ActiveElemG=d3.select("#domActiveElemG")
-
-                activeElem=null
-
-               dragDot.removeAttribute("transform")
-               dragDot.setAttribute("cx",0)
-               dragDot.setAttribute("cy",0)
+        cw.drawImageTopButton.style.visibility = "hidden"
+        // cw.drawImageBotButton.style.visibility = "hidden"
+        cw.drawImageBotButton.disabled = true
+        cw.drawImageFinishButton.disabled = true
+        cw.drawImageCancelButton.disabled = true
+        cw.drawImageCancelButton.style.borderColor = ""
+        cw.drawImageDeleteButton.style.visibility = "hidden"
+        cw.drawImageEditSpan.innerText = "Draw Images"
+        cw.drawImageTopTable.style.backgroundColor = "linen"
+        cw.containerDiv.style.backgroundColor = "linen"
 
 
-          }
 
     }
 }
-}
-
-
 
 var EditImage = false
 var DrawImage = false
 var ImageDeleted = false
 
-
-
 function startImageDraw()
 {
     RotateAngle = 0
-   // elemSizeDiv.innerHTML = "w = <input id=drawImageWidthValue type='text' style='width:30px;border=0' /> h = <input id=drawImageHeightValue type='text' style='width:30px;border=0' />"
+    // elemSizeDiv.innerHTML = "w = <input id=drawImageWidthValue type='text' style='width:30px;border=0' /> h = <input id=drawImageHeightValue type='text' style='width:30px;border=0' />"
 
     var cw = addElemImageCw
     if(EditImage==false)
@@ -246,19 +207,21 @@ function startImageDraw()
         DrawImage = true
         mySVG.setAttribute('onclick', " placeDrawImage()") //---click to add more icons for this session---
         DrawX.style("display", "inline")
-    }
+          MyMap.scrollWheelZoom.disable();
+        MyMap.dragging.disable()
+    mySVG.setAttribute("cursor","default")
+  }
 
-    if(cw.adjustedRotateImageValue)
+
         cw.adjustedRotateImageValue.value = 0
-      cw.bgImgFile.value=""
-      cw.bgImageWidthValue.value=""
-      cw.bgImageHeightValue.value=""
-      ImageHREf=null
+        cw.bgImgFile.value = ""
+        cw.bgImageWidthValue.value = ""
+        cw.bgImageHeightValue.value = ""
+        ImageHREf = null
 
 }
 
 //--click on svg---
-
 
 function finishDrawImage()
 {
@@ -269,14 +232,19 @@ function finishDrawImage()
         {
             var cw = addElemImageCw
             activeElem.removeAttribute("class")
+            activeElem.removeAttribute("onmouseup")
+            coverOff()
 
-            var finishedElem = activeElem.firstChild.cloneNode(true)
+            var finishedElem = document.getElementById("activeElem").cloneNode(true)
 
-            DrawImageEditId = "image"+new Date().getTime()
-            finishedElem.setAttribute("id", DrawImageEditId)
+            finishedElem.style.cursor = "default"
+            domActiveElemG.removeChild(document.getElementById("activeElem"))
 
-            if(activeElem.getAttribute("transform"))
-            finishedElem.setAttribute("transform", activeElem.getAttribute("transform"))
+            var id = "image"+new Date().getTime()
+            domElemG.appendChild(finishedElem)
+            finishedElem.setAttribute("id", id)
+
+            finishedElem.setAttribute("onmousedown", "editImageDraw("+id+",evt)")
 
             var ctm = finishedElem.getCTM()
             RAD2DEG = 180 / Math.PI;
@@ -285,43 +253,54 @@ function finishDrawImage()
 
             finishedElem.setAttribute("class", "imageElem")
 
-            finishedElem.style.cursor = "default"
-
-        finishedElem.setAttribute("onmousedown", "editImageDraw("+DrawImageEditId+",evt)")
-
-    finishedElem.setAttribute("width", cw.bgImageWidthValue.value)
-    finishedElem.setAttribute("height", cw.bgImageHeightValue.value)
+            ActiveElem = null
+            activeElem = null
+             ImageHREF = null
+            // d3SVG.style("cursor", "default")
+            mySVG.setAttribute('onclick', "placeDrawImage()") //---click to add more icons for this session---
+            finishedElem.setAttribute("onmouseover", "myZoomLevel("+MapZoom+","+id+")")
+            finishedElem.setAttribute("onmouseout", "removeZoomLevel()")
+          setLatLng(finishedElem) //---helperFuncts.js---
+           MyMap.dragging.enable()
+           MyMap.scrollWheelZoom.enable();
 
 
             DrawX.style("display", "none")
             DragDot.style("visibility", "hidden")
-            DragDot.attr("transform", null)
-
+            //topG.appendChild(dragDot)
             cw.drawImageFinishButton.disabled = true
             cw.drawImageCancelButton.disabled = true
-            coverOff()
-            activeElem.id="domActiveElemG"
-            domActiveElemG.appendChild(dragDot)
-            domActiveElemG.removeChild(activeElem.firstChild)
-            domActiveElemG.removeAttribute('class')
-            ActiveElem = null
-            activeElem = null
-
-            domElemG.appendChild(finishedElem)
-           // closeDrawImage()
-            startImageDraw()
-
+            cw.drawImageBotButton.disabled = true
         }
-
 
 }
 
 function cancelDrawImage()
 {
+    var cw = addElemImageCw
     if(EditImage==true)
         cancelEditImage()
-        else
-        closeDrawImage() 
+        else if(document.getElementById("activeElem"))
+        {
+            domActiveElemG.removeChild(document.getElementById("activeElem"))
+
+            activeElem = null
+            // d3SVG.style("cursor", "default")
+            ActiveElem = null
+             ImageHREF = null
+            mySVG.setAttribute('onclick', "placeDrawImage()") //---click to add more icons for this session---
+            DragDot.style("visibility", "hidden")
+            //topG.appendChild(dragDot)
+            cw.drawImageFinishButton.disabled = true
+            cw.drawImageBotButton.disabled = true
+            cw.drawImageCancelButton.disabled = true
+            cw.adjustedRotateImageValue.value = 0
+
+
+            coverOff()
+
+        }
+
 }
 
 //====================edit/update rect===============================
@@ -334,7 +313,7 @@ var EditThisImage
 function editImageDraw(elemObjEdit, evt)
 {
 
-  var isRightMB;
+    var isRightMB;
     var evtW = window.event;
     if(evtW)
     {
@@ -345,9 +324,10 @@ function editImageDraw(elemObjEdit, evt)
     else //---firefox--
         isRightMB = evt.which == 3;
 
-    if(isRightMB&&DrawImage==false&&ZoomDrawing==false)
+    var myZoomLevel=+elemObjEdit.getAttribute("InitZoom")
+    if(isRightMB&&DrawImage==false&&myZoomLevel==MapZoom)
     {
-      //  elemSizeDiv.innerHTML = "r = <input id=drawImageRadiusValue type='text' style='width:30px;border=0' /> "
+        //  elemSizeDiv.innerHTML = "r = <input id=drawImageRadiusValue type='text' style='width:30px;border=0' /> "
 
         EditThisImage = elemObjEdit
 
@@ -355,7 +335,7 @@ function editImageDraw(elemObjEdit, evt)
 
         ActiveElem = null
         activeElem = null
-
+         ImageHREF = null
         EditImage = true
         if(addElemImageLoad==false)
         {
@@ -371,42 +351,7 @@ function editImageDraw(elemObjEdit, evt)
             setEditImage()
 
     }
-    if(isRightMB&&ZoomDrawing==true ) //---zoom drag
-    {
-        mySVG.setAttribute("onmousedown", "startDragZoom(evt)")
-        mySVG.setAttribute("onmousemove", "dragZoom(evt)")
-        mySVG.setAttribute("onmouseup", "endDragZoom(evt)")
-        d3.select("#mySVG").on("mousedown.zoom", null)
-
-        var dragTarget=evt.target
-
-        var classed=dragTarget.getAttribute("class")
-        dragTarget.setAttribute("class", "dragTargetObj")
-        dragTarget.removeAttribute("onmousedown")
-        dragTarget.setAttribute("style","cursor:move")
-       dragTarget.setAttribute("opacity",.4)
-        DrawX.style("display", "none")
-        ZoomDraggedElems.push([dragTarget,"editImageDraw("+dragTarget.id+",evt)",classed])
-    }
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 var EditImage = false
 var DrawImageEditId
@@ -417,69 +362,43 @@ var EditImageObj
 function setEditImage()
 {
     coverOn()
+    MyMap.dragging.disable()
+    MyMap.scrollWheelZoom.disable();
+
+
     mySVG.removeAttribute('onclick')
     var cw = addElemImageCw
     var elemObjEdit = document.getElementById(DrawImageEditId)
+ EditImageObj = elemObjEdit.cloneNode(true)
+    elemObjEdit.style.display = "none"
+    EditImageObj.setAttribute("id", "activeElem")
+    EditImageObj.setAttribute("class", "dragTargetObj")
 
-    EditImage=true
+    EditImageObj.removeAttribute("onmousedown")
 
-    ActiveElem = d3.select("#domActiveElemG")
-    .attr("id", "activeElem")
-  .attr("transform", elemObjEdit.getAttribute("transform"))
-    .attr("class", "dragTargetObj")
+        domActiveElemG.insertBefore(EditImageObj, domActiveElemG.firstChild)
 
+        ActiveElem = d3.select("#activeElem")
+        activeElem = document.getElementById("activeElem")
+        domActiveElemG.appendChild(dragDot) //--place drag dot on top---
+        cw.drawImageDeleteButton.style.visibility = "visible"
+        cw.drawImageEditSpan.innerHTML = "Edit Image"
 
-    activeElem = document.getElementById("activeElem")
-    EditImageObj = elemObjEdit.cloneNode(true)
-    EditImageObj.removeAttribute("transform")
-    EditImageObj.removeAttribute("unmousedown")
-    EditImageObj.removeAttribute("style")
-    activeElem.appendChild(EditImageObj)
-
-    activeElem.appendChild(dragDot)
-
-    //---is this text rotated?---
-    var ctm = elemObjEdit.getCTM()
-    RAD2DEG = 180 / Math.PI;
-    var rotatedDeg = Math.atan2(ctm.b, ctm.a) * RAD2DEG;
-
-    if(!rotatedDeg) rotatedDeg = 0
-        cw.adjustedRotateImageValue.value = rotatedDeg
-
-        elemObjEdit.style.visibility = "hidden"
-
-
-
-         cw.drawImageTopButton.style.visibility="visible"
-
+        cw.drawImageTopButton.style.visibility = "visible"
+        cw.drawImageBotButton.style.visibility = "visible"
+        cw.drawImageTopTable.style.backgroundColor = "orange"
+        cw.containerDiv.style.backgroundColor = "orange"
         cw.drawImageCancelButton.disabled = false
         cw.drawImageFinishButton.disabled = false
+        cw.drawImageBotButton.disabled = false
 
-           cw.drawImageDeleteButton.style.visibility="visible"
+        //...slocate dargdot---
+        var bb=activeElem.getBBox()
+        dragDot.setAttribute("cx",bb.width)
+        dragDot.setAttribute("cy",bb.height)
+                dragDot.setAttribute("transform",activeElem.getAttribute("transform"))
 
-
-                var opacity = EditImageObj.getAttribute("opacity")
-
-
-
-
-            cw.drawImageEditSpan.innerHTML = "Edit Image"
-            cw.drawImageTopTable.style.backgroundColor = "orange"
-
-            cw.containerDiv.style.backgroundColor = "orange"
-            DrawX.attr("stroke", "darkorange")
-            DrawX.style("display", "inline")
-            DrawX.attr("transform", ActiveElem.attr("transform"))
-
-            //--place dragDot----
-            var width = parseFloat(activeElem.firstChild.getAttribute("width"))
-            var height = parseFloat(activeElem.firstChild.getAttribute("height"))
-           cw.bgImageWidthValue.value=width
-    cw.bgImageHeightValue.value=height
-
-            DragDot.attr("transform", "translate("+(width)+" "+(height)+")")
-
-            setImageEditDrag()
+        setImageEditDrag()
 
 }
 
@@ -503,37 +422,33 @@ function finishEditImage()
     {
         var cw = addElemImageCw
         activeElem.removeAttribute("class")
-        var finishedElem = activeElem.firstChild.cloneNode(true)
+        var finishedElem = activeElem.cloneNode(true)
         finishedElem.setAttribute("transform", ActiveElem.attr("transform"))
 
         finishedElem.setAttribute("class", "addElem")
 
-     finishedElem.setAttribute("opacity", ActiveElem.attr("opacity"))
+        finishedElem.setAttribute("opacity", ActiveElem.attr("opacity"))
+
+        finishedElem.setAttribute("rotateAngle", RotateAngle)
 
 
-            finishedElem.setAttribute("rotateAngle", RotateAngle)
+        dragDot.removeAttribute("transform")
 
-            activeElem.removeChild(activeElem.firstChild)
-             activeElem.removeAttribute("transform")
-            ActiveElem.id="domActiveElemG"
-            dragDot.removeAttribute("transform")
+        ActiveElem = null
+        activeElem = null
+        finishedElem.style.cursor = "default"
+        finishedElem.style.visibility = ""
+        //---is this a timelined elem---
 
+        finishedElem.setAttribute("onmousedown", "editImageDraw("+DrawImageEditId+",evt)")
+        finishedElem.setAttribute("id", DrawImageEditId)
+        UpdateThisImage = finishedElem
+        //updateImage()
+        domElemG.insertBefore(finishedElem, EditThisImage)
+        domElemG.removeChild(EditThisImage)
+            setLatLng(finishedElem) //---helperFuncts.js---
 
-
-            ActiveElem = null
-            activeElem = null
-            finishedElem.style.cursor = "default"
-            finishedElem.style.visibility = ""
-            //---is this a timelined elem---
-
-           finishedElem.setAttribute("onmousedown", "editImageDraw("+DrawImageEditId+",evt)")
-            finishedElem.setAttribute("id", DrawImageEditId)
-            UpdateThisImage = finishedElem
-            //updateImage()
-           domElemG.insertBefore(finishedElem, EditThisImage)
-           domElemG.removeChild(EditThisImage)
-
-            EditImage = false
+        EditImage = false
 
     }
     closeDrawImage()
@@ -558,7 +473,6 @@ function resetEditImage()
     cw.drawImageFinishButton.disabled = false
     DrawImage = true
 
-
     //---click to add more circles for this session---
 
 }
@@ -566,25 +480,19 @@ function resetEditImage()
 function cancelEditImage()
 {
 
- closeDrawImage()
- /*
-       var cw = addElemImageCw
     //---return to previous settings
     var elemObjEdit = document.getElementById(DrawImageEditId)
-    elemObjEdit.style.visibility = ""
-  mySVG.appendChild(dragDot)
-  domActiveElemG.removeChild(document.getElementById("activeElem"))
-    //--place dragDot----
-            var width = parseFloat(elemObjEdit.getAttribute("width"))
-            var height = parseFloat(elemObjEdit.getAttribute("height"))
-              cw.bgImageWidthValue.value = width.toFixed(0)
-                cw.bgImageHeightValue.value = width.toFixed(0)
-            dragDot.setAttribute("transform", "translate("+(width)+" "+(height)+")")
-   // ActiveElem = null
-    //setEditImage()
-    */
-}
 
+    elemObjEdit.style.display = "inline"
+    domActiveElemG.removeChild(document.getElementById("activeElem"))
+    activeElem = null
+
+    ActiveElem = null
+    //topG.appendChild(dragDot) //--place drag dot on top---
+    closeDrawImage()
+    //setEditEllipse()
+
+}
 
 //=======================delete rect==================
 var ImageDeleted = false
@@ -592,15 +500,15 @@ var ImageDeleted = false
 function removeCurrentDrawImage()
 {
 
-         var cw = addElemImageCw
+    var cw = addElemImageCw
     var elemObjEdit = document.getElementById(DrawImageEditId)
     domElemG.removeChild(elemObjEdit)
     ImageDeleted = true
 
-           EditImage = false
-            DrawImage = false
+    EditImage = false
+    DrawImage = false
 
-            DrawImageEditId=null
+    DrawImageEditId = null
     closeDrawImage()
 
 }
@@ -778,23 +686,23 @@ function topDrawImage()
 {
 
     var elemObjEdit = document.getElementById(DrawImageEditId)
-        var finishedElem = document.getElementById("activeElem").firstChild.cloneNode(true)
+    var finishedElem = document.getElementById("activeElem").firstChild.cloneNode(true)
 
-        finishedElem.setAttribute("transform", document.getElementById("activeElem").getAttribute("transform"))
-        finishedElem.setAttribute("class", "imageElem")
-        finishedElem.removeAttribute("style")
-        finishedElem.style.cursor = "default"
-        finishedElem.setAttribute("id", DrawImageEditId)
+    finishedElem.setAttribute("transform", document.getElementById("activeElem").getAttribute("transform"))
+    finishedElem.setAttribute("class", "imageElem")
+    finishedElem.removeAttribute("style")
+    finishedElem.style.cursor = "default"
+    finishedElem.setAttribute("id", DrawImageEditId)
 
-        activeElem.id="domActiveElemG"
-        activeElem.removeAttribute("transform")
-        dragDot.removeAttribute("transform")
+    activeElem.id = "domActiveElemG"
+    activeElem.removeAttribute("transform")
+    dragDot.removeAttribute("transform")
 
-        activeElem.removeChild(activeElem.firstChild)
+    activeElem.removeChild(activeElem.firstChild)
 
     domElemG.removeChild(elemObjEdit)
     domElemG.appendChild(finishedElem)
-     activeElem=null
+    activeElem = null
     closeDrawImage()
 }
 function botDrawImage()
@@ -810,19 +718,19 @@ function botDrawImage()
         finishedElem.style.cursor = "default"
         finishedElem.setAttribute("id", DrawImageEditId)
 
-        activeElem.id="domActiveElemG"
+        activeElem.id = "domActiveElemG"
         activeElem.removeAttribute("transform")
         dragDot.removeAttribute("transform")
         domElemG.removeChild(elemObjEdit)
         activeElem.removeChild(activeElem.firstChild)
-        domElemG.insertBefore(finishedElem,domElemG.firstChild)
-        activeElem=null
-       closeDrawImage()
-   }
-   else
-   {
+        domElemG.insertBefore(finishedElem, domElemG.firstChild)
+        activeElem = null
+        closeDrawImage()
+    }
+    else
+    {
         finishDrawImage()
-        domElemG.insertBefore(domElemG.lastChild,domElemG.firstChild)
-   }
+        domElemG.insertBefore(domElemG.lastChild, domElemG.firstChild)
+    }
 
 }
