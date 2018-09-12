@@ -22,7 +22,7 @@ function startCursorLoc()
                 if(DrawPath==true||DrawPathStart==true)trackDrawPath()
                 if(DrawPathEdit==true)trackDrawPathEdit()
                 if(addElemPgonViz==true)trackDrawPgon()
-
+                 if(addElemBGimageViz==true)trackDrawBGimage()  
                 if(addElemIconViz==true)trackDrawIcon()
                 if(addElemPolygonViz==true)trackDrawPolygon()
                 if(addElemComponentViz==true)trackDrawComponent()
