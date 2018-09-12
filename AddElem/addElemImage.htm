@@ -27,14 +27,14 @@ box-shadow: 4px 4px 5px #888;
 </tr>
 <tr>
 <td>
-<input id=bgImgFile type="file" onchange="parent.loadImageFile()">
+<input id=imgFile type="file" onchange="parent.loadImageFile()">
 </td>
 
 
 </tr>
 <tr><td align=center >
-Width:<input disabled type="text" style=width:60px id=bgImageWidthValue />
-Height:<input disabled type="text" style=width:60px id=bgImageHeightValue />
+Width:<input disabled type="text" style=width:60px id=imageWidthValue />
+Height:<input disabled type="text" style=width:60px id=imageHeightValue />
 
 
 
@@ -43,44 +43,44 @@ Height:<input disabled type="text" style=width:60px id=bgImageHeightValue />
 <td align=center >
 Opacity:
   <select onChange=parent.drawImageOpacitySelected() id=drawImageOpacitySelect>
-		<option >0.1</option>
-		<option>0.2</option>
-		<option >0.3</option>
-		<option >0.4</option>
-		<option>0.5</option>
-		<option >0.6</option>
-		<option >0.7</option>
-		<option >0.8</option>
-		<option >0.9</option>
-		<option  selected >1.0</option>
+        <option >0.1</option>
+        <option>0.2</option>
+        <option >0.3</option>
+        <option >0.4</option>
+        <option>0.5</option>
+        <option >0.6</option>
+        <option >0.7</option>
+        <option >0.8</option>
+        <option >0.9</option>
+        <option  selected >1.0</option>
 
-		</select>
+        </select>
 
 </td>
 </tr>
 
 <tr>
-	<td valign=bottom align=center>Rotate
-		&nbsp;&nbsp;<button  onClick=parent.rotateImageAdjust(-1) style='height:25px;width:25px;padding:0px'><img width=20 height=20 src="../Images/minusRound.png" /></button>
-		<select title="rotate toggle value" id=rotateDrawImageAdjustSelect >
-		<option>.5</option>
-		<option>1</option>
-		<option>2</option>
-		<option selected>5</option>
-		<option>10</option>
-		</select>
-		<button onClick=parent.rotateImageAdjust(1)   style='height:25px;width:25px;padding:0px'><img width=20 height=20 src="../Images/plusRound.png" /></button>
-		&nbsp;<input id=adjustedRotateImageValue disabled type=text style='width:40px;' value=0 />&deg;
-	</td>
+    <td valign=bottom align=center>Rotate
+        &nbsp;&nbsp;<button  onClick=parent.rotateImageAdjust(-1) style='height:25px;width:25px;padding:0px'><img width=20 height=20 src="../Images/minusRound.png" /></button>
+        <select title="rotate toggle value" id=rotateDrawImageAdjustSelect >
+        <option>.5</option>
+        <option>1</option>
+        <option>2</option>
+        <option selected>5</option>
+        <option>10</option>
+        </select>
+        <button onClick=parent.rotateImageAdjust(1)   style='height:25px;width:25px;padding:0px'><img width=20 height=20 src="../Images/plusRound.png" /></button>
+        &nbsp;<input id=adjustedRotateImageValue disabled type=text style='width:40px;' value=0 />&deg;
+    </td>
 </tr>
 
 
 <tr align=center>
 <td>
-	<button id=drawImageCancelButton disabled title='cancel/remove this image' onClick=parent.cancelDrawImage()>cancel</button>
-	<button style='background-color:red;visibility:hidden' id=drawImageDeleteButton  onClick=parent.removeCurrentDrawImage()>delete</button>
-	<button id=drawImageTopButton style=background:white;font-size:120%;font-weight:bold;color:maroon;visibility:hidden  title='Move to top' onClick=parent.topDrawImage()>&#x21E7;</button>
-	<button id=drawImageBotButton style=background:white;font-size:120%;font-weight:bold;color:maroon   title='Move to bottom' onClick=parent.botDrawImage()>&#x21E9;</button>
+    <button id=drawImageCancelButton disabled title='cancel/remove this image' onClick=parent.cancelDrawImage()>cancel</button>
+    <button style='background-color:red;visibility:hidden' id=drawImageDeleteButton  onClick=parent.removeCurrentDrawImage()>delete</button>
+    <button id=drawImageTopButton style=background:white;font-size:120%;font-weight:bold;color:maroon;visibility:hidden  title='Move to top' onClick=parent.topDrawImage()>&#x21E7;</button>
+    <button id=drawImageBotButton style=background:white;font-size:120%;font-weight:bold;color:maroon   title='Move to bottom' onClick=parent.botDrawImage()>&#x21E9;</button>
     <button id=drawImageFinishButton disabled onClick=parent.finishDrawImage()>finish</button>
 </td>
 </tr>
