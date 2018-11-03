@@ -15,7 +15,7 @@ function disableAllButtons()
     openAddBGimageButton.disabled=true
     openAddTextButton.disabled=true
     openAddPathButton.disabled=true
-    openAddPgonButton.disabled=true
+    openAddSymbolButton.disabled=true
     openAddPolygonButton.disabled=true
     openAddArcButton.disabled=true
 
@@ -44,7 +44,7 @@ function enableAllButtons()
     openAddBGimageButton.disabled=false
     openAddTextButton.disabled=false
     openAddPathButton.disabled=false
-    openAddPgonButton.disabled=false
+    openAddSymbolButton.disabled=false
     openAddPolygonButton.disabled=false
     openAddArcButton.disabled=false
 
@@ -71,7 +71,7 @@ function enableAllButtons()
 
     openAddTextButton.style.borderColor="" 
     openAddPathButton.style.borderColor="" 
-    openAddPgonButton.style.borderColor="" 
+    openAddSymbolButton.style.borderColor="" 
     openAddPolygonButton.style.borderColor=""
     openAddArcButton.style.borderColor=""
 
@@ -87,15 +87,15 @@ function enableAllButtons()
 }
 
 
-function openAddPgonDraw()
+function openAddSymbolDraw()
 {
-    if(addElemPgonLoad==true)
-        startPgonDraw()
+    if(addElemSymbolLoad==true)
+        startSymbolDraw()
 
-        openIframe("AddElem", "addElemPgon", 0)
-        mySVG.setAttribute("onclick", "plantPgonSymbol(event)")
+        openIframe("AddElem", "addElemSymbol", 0)
+        mySVG.setAttribute("onclick", "plantSymbolSymbol(event)")
 
-        openAddPgonButton.style.borderStyle = "inset"
+        openAddSymbolButton.style.borderStyle = "inset"
 }
 
 function openAddArcDraw()
@@ -185,7 +185,7 @@ function openAddTexture()
         startTextureDraw()
 
         openIframe("AddElem", "addElemTexture", 0)
-       // mySVG.setAttribute("onclick", "plantPgonSymbol(event)")
+       // mySVG.setAttribute("onclick", "plantSymbolSymbol(event)")
 
         openAddTextureButton.style.borderStyle = "inset"
 }
@@ -203,7 +203,7 @@ function openAddBGimage()
     }
 
         openIframe("AddElem", "addElemBGimage", 0)
-       // mySVG.setAttribute("onclick", "plantPgonSymbol(event)")
+       // mySVG.setAttribute("onclick", "plantSymbolSymbol(event)")
 
         openAddBGimageButton.style.borderStyle = "inset"
 }
@@ -214,7 +214,7 @@ function openAddGradient()
         startGradientDraw()
 
         openIframe("AddElem", "addElemGradient", 0)
-       // mySVG.setAttribute("onclick", "plantPgonSymbol(event)")
+       // mySVG.setAttribute("onclick", "plantSymbolSymbol(event)")
 
         openAddGradientButton.style.borderStyle = "inset"
 }
@@ -330,7 +330,7 @@ function isAddElemOpen() //---called from iframeSelection.js---
     if(addElemEllipseViz==true)AddElemOpen = true;
     if(addElemRectViz==true)AddElemOpen = true;
     if(addElemTextViz==true)AddElemOpen = true;
-    if(addElemPgonViz==true)AddElemOpen = true;
+    if(addElemSymbolViz==true)AddElemOpen = true;
     if(addElemTextureViz==true)AddElemOpen = true;
     if(addElemGradientViz==true)AddElemOpen = true;
     if(addElemPolygonViz==true)AddElemOpen = true;
@@ -421,7 +421,7 @@ function closeIframe(name)
     openAddBGimageButton.style.borderStyle = ""
     openAddTextButton.style.borderStyle = ""
     openAddPathButton.style.borderStyle = ""
-    openAddPgonButton.style.borderStyle = ""
+    openAddSymbolButton.style.borderStyle = ""
     openAddPolygonButton.style.borderStyle = ""
     openAddArcButton.style.borderStyle = ""
 
@@ -477,7 +477,7 @@ function closeAllFrames()
     openAddBGimageButton.style.borderStyle = ""
     openAddTextButton.style.borderStyle = ""
     openAddPathButton.style.borderStyle = ""
-    openAddPgonButton.style.borderStyle = ""
+    openAddSymbolButton.style.borderStyle = ""
     openAddPolygonButton.style.borderStyle = ""
     openAddArcButton.style.borderStyle = ""
 
@@ -510,7 +510,7 @@ function closeAllFrames()
             else if(name=="addElemEllipse")closeDrawEllipse()
             else if(name=="addElemRect")closeDrawRect()
             else if(name=="addElemPath")closeDrawPath()
-            else if(name=="addElemPgon")closeDrawPgon()
+            else if(name=="addElemSymbol")closeDrawSymbol()
             else if(name=="addElemPolygon")closeDrawPolygon()
             else if(name=="addElemArc")closeDrawArc()
 
@@ -541,11 +541,11 @@ var addElemChartLoad = false
 var addElemArcLoad = false
 var addElemIconLoad = false
 var addElemImageLoad = false
-var addElemPgonLoad = false
+var addElemSymbolLoad = false
 var addElemPolygonLoad = false
 var addElemTextureLoad = false
 var addElemGradientLoad = false
-var addElemPgonEditLoad = false
+var addElemSymbolEditLoad = false
 var addElemEllipseLoad = false
 var addElemRectLoad = false
 var addElemBGimageLoad = false
@@ -566,11 +566,11 @@ var editElemSchematicViz = false
 
 var addElemIconViz = false
 var addElemImageViz = false
-var addElemPgonViz = false
+var addElemSymbolViz = false
 var addElemPolygonViz = false
 var addElemTextureViz = false
 var addElemGradientViz = false
-var addElemPgonEditViz = false
+var addElemSymbolEditViz = false
 var addElemEllipseViz = false
 var addElemRectViz = false
 var addElemBGimageViz = false
@@ -589,13 +589,13 @@ var editElemSchematicCw
 var addElemIconCw
 var addElemImageCw
 
-var addElemPgonCw
+var addElemSymbolCw
 var addElemPolygonCw
 var addElemTextureCw
 var addElemGradientCw
 
 
-var addElemPgonEditCw
+var addElemSymbolEditCw
 var addElemEllipseCw
 var addElemRectCw
 var addElemBGimageCw
@@ -615,8 +615,8 @@ iframeNameArray[2] = 'addElemPathEdit'
 iframeNameArray[3] = 'addElemCircle'
 iframeNameArray[4] = 'addElemEllipse'
 iframeNameArray[5] = 'addElemRect'
-iframeNameArray[6] = 'addElemPgon'
-iframeNameArray[7] = 'addElemPgonEdit'
+iframeNameArray[6] = 'addElemSymbol'
+iframeNameArray[7] = 'addElemSymbolEdit'
 
 iframeNameArray[8] = 'addElemTexture'
 iframeNameArray[9] = 'addElemIcon'
