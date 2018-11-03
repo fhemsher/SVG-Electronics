@@ -125,7 +125,9 @@ box-shadow: 4px 4px 5px #888;
 </tr>
 
 </table>
-    <div style=background:white;width:100%;height:350px;overflow-y:scroll>
+<center><a title="Include special characters" href="javascript:includeSpecialChar()">Special Characters</a></center>
+
+    <div id=specialCharDiv style=visibility:hidden;background:white;width:100%;height:1px;overflow-y:scroll>
     <center>Click to insert character into text.
     <table style=width:100%;cursor:pointer;font-size:140%;border-collapse:collapse; cellpadding=2 border=1 >
  <tr><td align=center colspan=12 >Superscript</td></tr>
@@ -1139,8 +1141,9 @@ function writeTextColorSelection()
 		option.style.backgroundColor=myColor
 		option.value=myColor
 		option.title=name+" "+myColor
-       // if(parent.hexString.indexOf(myColor)!=-1)
-       // option.style.color="white"
+        //if(parent.hexString.indexOf(myColor)!=-1)
+        //option.style.color="white"
+
 
 		option.text=k
          drawTextStrokeSelect.appendChild(option)
@@ -1149,8 +1152,9 @@ function writeTextColorSelection()
 		option.style.backgroundColor=myColor
 		option.value=myColor
 		option.title=name+" "+myColor
-       // if(parent.hexString.indexOf(myColor)!=-1)
+         //if(parent.hexString.indexOf(myColor)!=-1)
         //option.style.color="white"
+
 
 		option.text=k
         drawTextFillSelect.appendChild(option)
@@ -1175,6 +1179,21 @@ parent.startTextDraw()
    		parent.setEditText()
         else
           parent.startTextDraw()
+
+
+
+}
+
+function includeSpecialChar()
+{
+   specialCharDiv.style.height="300px"
+    specialCharDiv.style.visibility="visible"
+
+
+    var width=containerDiv.scrollWidth+10
+   var height=containerDiv.scrollHeight+10
+      parent.sizeFrame('addElemText',width,height)
+
 
 
 
