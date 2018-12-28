@@ -9,7 +9,7 @@ if(!ComponentDoc)
     xhr.onload = function()
     {
         var xmlString = this.responseText
-
+         getComponentLibraryButton.innerHTML="Electronic Components"
         //---DOMParser---
         var parser = new DOMParser();
         ComponentDoc = parser.parseFromString(xmlString, "text/xml").documentElement;
@@ -122,6 +122,8 @@ if(!ComponentDoc)
         componentTableDiv.style.visibility = "visible"
         setComponentEditDrag()
          getComponentLibraryButton.style.borderStyle = "inset"
+         getComponentLibraryButton.innerHTML="Electronic Components"
+
 
        CookieEmail=getCookie("email")
        CookieName=getCookie("name")
@@ -146,7 +148,10 @@ if(!ComponentDoc)
         componentTableDiv.style.visibility = "visible"
         setComponentEditDrag()
          disableAllButtons()
+         getComponentLibraryButton.innerHTML="Electronic Components" 
     }
+
+   getComponentLibraryButton.innerHTML.innerHTML="Electronic Components"
 }
 
 function refreshComponentLibrary()
