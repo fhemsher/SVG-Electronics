@@ -5777,4 +5777,6 @@
 					<path style="fill:none;fill-rule:nonzero;stroke:#000000;stroke-width:6.0584116;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="path3685" d="M 283.55872,190.46263 A 15.373666,15.373666 0 1 1 252.81139,190.46263 A 15.373666,15.373666 0 1 1 283.55872,190.46263 z" transform="matrix(0.248134,0.248134,-0.248134,0.248134,589.7614,17.527997)"/>
 					<path style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:3.54330897;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" d="M 587.1907,128.48809 L 606.66054,119.9496" id="path3687"/></g></g></g>
 		<rect id="cover" width="520" height="220" fill="white" fill-opacity="0" stroke="none"/></g>
-	<g xmlns="http://www.w3.org/2000/svg" id="schematic1528230308902" nativeWidth="78" nativeHeight="58" myscale="1.0" transform="translate(-171,-132)" category="Miscellaneous Circuits" title="jjjjjjj" name="Francis Hemsher" email="fhemsher@gmail.com" utcMS="1528230308902" parentid="schematic1528230308902"><circle stroke="#9400D3" stroke-width="2" fill="white" fill-opacity="0" transform="translate(191 152)" r="20"/><circle stroke="#9400D3" stroke-width="2" fill="white" fill-opacity="0" transform="translate(229 170)" r="20"/><rect width="78" height="58" stroke="none" fill="white" fill-opacity="0" transform="translate(171,132)"/></g></svg>
+
+
+    </svg>
