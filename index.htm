@@ -318,7 +318,7 @@ You may adjust the size of the chart via the Scale slider.
 
 
 <div id=selectDrawElemDiv style='width:100%;background:#f0f8ff;position:fixed;top:0px;left:0px;'><b><span style="font-weight:bold;color:red;font-family:times new roman">SVG</span> <span style=color:blue><i>Electronics</i></span></b><button onClick=openHelp() style=width:25px;height:25px;padding:0px;border:0px;background:transparent ><img src="Images/help.png" alt="SVG SCADA Control Diagrams"  width=25 height=25 /></button>
-&nbsp; &nbsp; &nbsp; &nbsp; <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=getComponentLibraryButton  style=background-color:#C3E6D3 onClick=getComponentLibrary()>Electronic Components</button><img id=openComponentButton onClick=openComponentHelp() align=center src="Images/help.png"  width=20 height=20  alt="SVG SCADA Control Components" />
+&nbsp; &nbsp; &nbsp; &nbsp; <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=getComponentLibraryButton  style=background-color:#C3E6D3 onClick=getComponentLibraryButton.innerHTML="Loading...";getComponentLibrary()>Electronic Components</button><img  onClick=openComponentHelp() align=center src="Images/help.png"  width=20 height=20  alt="SVG SCADA Control Components" />
 &nbsp; &nbsp; &nbsp; &nbsp; <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=getSchematicLibraryButton  style=background-color:#E0CAEA onClick=getSchematicLibrary()>Electronic Schematics</button><img id=openSchematicButton onClick=openSchematicHelp() align=center src="Images/help.png"  width=20 height=20  alt="SVG Electronic Schematics" />
 &nbsp; &nbsp; &nbsp; &nbsp; <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddGraphButton  style=background-color:#0000cd;color:white onClick=openAddGraphDraw()>Graphs</button><img id=openGraphHelpButton onClick=openGraphHelp() align=center src="Images/help.png"  width=20 height=20  alt="Graphs" />
 &nbsp; &nbsp; &nbsp; &nbsp; <button onmouseover=this.style.borderColor="lime" onmouseout=this.style.borderColor=''  id=openAddChartButton  style=background-color:#3cb371;color:white onClick=openAddChartDraw()>Charts</button><img id=openChartHelpButton onClick=openChartHelp() align=center src="Images/help.png"  width=20 height=20  alt="Charts" />
@@ -420,7 +420,7 @@ send a segment of your SVG drawing as a schematic to the library for use by othe
 <table style=width:100%><tr><td style=width:90% align=center><b>Components Library</b></td><td align=right></td></tr></table>
 <table id=componentTable border=1 style=border-collapse:collapse;width:100% ></table>
 <br>
-Remove Your Component(s) from Library:
+
 <table class="copySource"  id=componentListTable border=1 style='display:none;border-collapse:collapse' cellpadding=5>
 </table>
 <button title="Close Component Library" id=componentTableCloseButton onmouseover=this.style.background="red"  onmouseout=this.style.background=""  style='visibility:hidden;position:fixed;top:70px;left:345px' onclick=closeComponentTable() >X</button>
@@ -430,7 +430,7 @@ Remove Your Component(s) from Library:
 <table style=width:100%><tr><td style=width:90% align=center><b>Schematic Library</b></td><td align=right></td></tr></table>
 <table id=schematicTable border=1 style=border-collapse:collapse;width:100% ></table>
 <br>
-Remove Your Schematic(s) from Library:
+
 <table class="copySource"  id=schematicListTable border=1 style='display:none;border-collapse:collapse' cellpadding=5>
 </table>
 <button title="Close Schematic Library" id=schematicTableCloseButton onmouseover=this.style.background="red"  onmouseout=this.style.background=""  style='visibility:hidden;position:fixed;top:70px;left:345px' onclick=closeSchematicTable() >X</button>
@@ -589,7 +589,7 @@ function writeEM()
     em+="gm"
     em+="ail."
     em+="com"
-   emDiv.innerHTML=em +" &nbsp;&nbsp;<span style=color:maroon>Last Update: 12/16/2018</span>"
+   emDiv.innerHTML=em +" &nbsp;&nbsp;<span style=color:maroon>Last Update: 1/15/2019</span>"
 
 }
 
