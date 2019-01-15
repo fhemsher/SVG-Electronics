@@ -103,12 +103,32 @@ function loadImageFile()
             ImageHREF = reader.result
              var image = new Image();
             image.src = reader.result;
-            image.onload = function() {
+            image.onload = function()
+            {
 
-                ImageWidth=image.naturalWidth
-                ImageHeight=image.naturalHeight
-                cw.imageWidthValue.value = ImageWidth
-                cw.imageHeightValue.value = ImageHeight
+                var initWidth=image.naturalWidth
+                var initHeight=image.naturalHeight
+                if(initWidth>400||initHeight>400)
+                {
+                 if(initWidth>=initHeight)
+                    var maxSize=initWidth
+                    else
+                    var maxSize=initHeight
+
+                     var sizeRatio=400/maxSize
+                    ImageWidth=initWidth*sizeRatio
+                    ImageHeight=initHeight*sizeRatio
+
+                }
+                else
+                {
+                    ImageWidth=image.naturalWidth
+                    ImageHeight=image.naturalHeight
+                }
+
+
+                cw.imageWidthValue.value = ImageWidth.toFixed(0)
+                cw.imageHeightValue.value = ImageHeight.toFixed(0)
             }
         }
         , false);
@@ -119,6 +139,7 @@ function loadImageFile()
 
     }
 }
+
 
 ///---X button and iframe close all---
 function closeDrawImage()
@@ -383,7 +404,7 @@ function setEditImage()
         cw.drawImageBotButton.disabled = false
 
         //...slocate dargdot---
-        var bb=activeElem.getBBox()
+        var bb=domActiveElemG.firstChild.getBBox()
         imgDragArrow.setAttribute("x",bb.width-12.5)
         imgDragArrow.setAttribute("y",bb.height-12.5)
                 imgDragArrow.setAttribute("transform",activeElem.getAttribute("transform"))
